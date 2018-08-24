@@ -38,9 +38,11 @@ func main() {
 
 	fmt.Println("Starting projectile ...")
 	fmt.Printf("x=%f - y=%f", p.Position.X, p.Position.Y)
-	for p.Position.Y <= 0 {
+	var count = 0
+	for p.Position.Y >= 0 {
 		p = tick(w, p)
-		fmt.Printf("x=%f - y=%f\n", p.Position.X, p.Position.Y)
+		fmt.Printf("%d - x=%f - y=%f\n", count, p.Position.X, p.Position.Y)
+		count++
 	}
 	fmt.Println("Done")
 }
