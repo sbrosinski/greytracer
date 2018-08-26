@@ -23,6 +23,13 @@ func TestAddingTwoTuples(t *testing.T) {
 	}
 }
 
+func TestAddingTwoTuples2(t *testing.T) {
+	var t1 = Tuple{3, -2, 5, 1}
+	var t2 = Tuple{-2, 3, 1, 0}
+	var result = Add(t1, t2)
+	assert.Equal(t, Tuple{1, 1, 6, 1}, result)
+}
+
 func TestSubtractingTwoPoints(t *testing.T) {
 	var p1 = NewPoint(3, 2, 1)
 	var p2 = NewPoint(5, 6, 7)

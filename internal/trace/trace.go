@@ -15,6 +15,15 @@ type Tuple struct {
 }
 
 // Add adds a tuple to this tuple
+func Add(a Tuple, b Tuple) Tuple {
+	return Tuple{
+		a.X + b.X,
+		a.Y + b.Y,
+		a.Z + b.Z,
+		a.W + b.W}
+}
+
+// Add adds a tuple to this tuple
 func (tpl *Tuple) Add(t Tuple) Tuple {
 	return Tuple{
 		tpl.X + t.X,
@@ -59,6 +68,11 @@ func (tpl *Tuple) Normalize() Tuple {
 // Equals checks if this tuple is equal to t
 func (tpl *Tuple) Equals(t Tuple) bool {
 	return tpl.X == t.X && tpl.Y == t.Y && tpl.Z == t.Z && tpl.W == t.W
+}
+
+// Equals checks if this tuple is equal to t
+func Equals2(a Tuple, b Tuple) bool {
+	return a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W
 }
 
 // NewPoint creates a new tuple which is a point
