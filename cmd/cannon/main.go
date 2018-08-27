@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
 
-	"github.com/sbrosinski/greytracer/internal/trace"
+	"github.com/sbrosinski/graytracer/internal/trace"
 )
 
 // Projectile has a position (a point) and a velocity (a vector)
@@ -26,11 +27,13 @@ func tick(world World, p Projectile) Projectile {
 }
 
 func main() {
+	var canvas = trace.NewCanvas(900, 550)
 	// projectile starts one unit above the origin.
 	// velocity is normalized to 1 unit/tick.
 	// p ← projectile(point(0, 1, 0), normalize(vector(1, 1, 0)))
-	var vel = trace.NewVector(1, 1, 0)
-	var p = Projectile{trace.NewPoint(0, 1, 0), vel.Normalize()}
+	var vel = trace.NewVector(1, 1.8, 0)
+	velNorm := vel.Normalize()
+	var p = Projectile{trace.NewPoint(0, 1, 0), velNorm.Multiply(11.25)}
 
 	// world gravity -0.1 unit/tick, and wind is -0.01 unit/tick.
 	// w ← world(vector(0, -0.1, 0), vector(-0.01, 0, 0))
@@ -43,6 +46,24 @@ func main() {
 		p = tick(w, p)
 		fmt.Printf("%d - x=%f - y=%f\n", count, p.Position.X, p.Position.Y)
 		count++
+
+		canvX := int(p.Position.X)
+		canvY := canvas.Height - int(p.Position.Y)
+		red := trace.Color{Red: 1, Green: 0, Blue: 0}
+		canvas.WritePixel(canvX, canvY, red)
+
 	}
 	fmt.Println("Done")
+
+	f, err := os.Create("cannon.ppm")
+	check(err)
+	defer f.Close()
+	_, err = f.WriteString(canvas.ToPPM())
+	check(err)
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }

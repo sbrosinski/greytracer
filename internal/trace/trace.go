@@ -41,6 +41,15 @@ func (tpl *Tuple) Subtract(t Tuple) Tuple {
 		tpl.W - t.W}
 }
 
+// Multiply multiplies a tuple from this tuple
+func (tpl *Tuple) Multiply(a float64) Tuple {
+	return Tuple{
+		tpl.X * a,
+		tpl.Y * a,
+		tpl.Z * a,
+		tpl.W * a}
+}
+
 // Negate negates this tuple, subtracting it from the zero tuple
 func (tpl *Tuple) Negate() Tuple {
 	return Tuple{

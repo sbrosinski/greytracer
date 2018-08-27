@@ -39,6 +39,16 @@ func TestSubtractingTwoPoints(t *testing.T) {
 	}
 }
 
+func TestMultiplyingTuple(t *testing.T) {
+	var a = Tuple{1, -2, 3, -4}
+	aResult := a.Multiply(3.5)
+	assert.Equal(t, Tuple{3.5, -7, 10.5, -14}, aResult)
+
+	var b = Tuple{1, -2, 3, -4}
+	bResult := b.Multiply(0.5)
+	assert.Equal(t, Tuple{0.5, -1, 1.5, -2}, bResult)
+}
+
 func TestNegatingATuple(t *testing.T) {
 	var tuple = Tuple{1, -2, 3, -4}
 	var negated = tuple.Negate()
