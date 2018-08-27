@@ -24,7 +24,7 @@ func NewCanvas(width int, height int) Canvas {
 // ToPPM converts canvas to PPM format
 func (c *Canvas) ToPPM() string {
 	var ppm strings.Builder
-	ppm.WriteString("P6\n")
+	ppm.WriteString("P3\n")
 	ppm.WriteString(fmt.Sprintf("%d %d\n", c.Width, c.Height))
 	ppm.WriteString("255\n")
 	ppm.WriteString(`"""`)

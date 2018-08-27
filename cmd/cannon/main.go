@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"image/png"
 	"os"
-	"strings"
 
-	"github.com/sbrosinski/graytracer/internal/ppm"
 	"github.com/sbrosinski/graytracer/internal/trace"
 )
 
@@ -54,18 +51,13 @@ func main() {
 		canvY := canvas.Height - int(p.Position.Y)
 		red := trace.Color{Red: 1, Green: 0, Blue: 0}
 		canvas.WritePixel(canvX, canvY, red)
+		canvas.WritePixel(canvX-1, canvY, red)
+		canvas.WritePixel(canvX+1, canvY, red)
+		canvas.WritePixel(canvX, canvY-1, red)
+		canvas.WritePixel(canvX, canvY+1, red)
 
 	}
 	fmt.Println("Done")
-
-	ppmReader := strings.NewReader(canvas.ToPPM())
-	img, err := ppm.Decode(ppmReader)
-	check(err)
-
-	jpgFile, err := os.Create("cannon.png")
-	defer jpgFile.Close()
-	check(err)
-	png.Encode(jpgFile, img)
 
 	f, err := os.Create("cannon.ppm")
 	check(err)
