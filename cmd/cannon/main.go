@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image/png"
 	"os"
 
 	"github.com/sbrosinski/graytracer/internal/trace"
@@ -59,10 +60,10 @@ func main() {
 	}
 	fmt.Println("Done")
 
-	f, err := os.Create("cannon.ppm")
+	f, err := os.Create("cannon.png")
 	check(err)
 	defer f.Close()
-	_, err = f.WriteString(canvas.ToPPM())
+	err = png.Encode(f, canvas.ToImage())
 	check(err)
 }
 

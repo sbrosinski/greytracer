@@ -2,6 +2,8 @@ package trace
 
 import (
 	"fmt"
+	"image"
+	"image/color"
 	"strings"
 )
 
@@ -50,6 +52,19 @@ func (c *Canvas) ToPPM() string {
 	ppm.WriteString(`"""`)
 	ppm.WriteString("\n")
 	return ppm.String()
+}
+
+// ToImage generates an Image from Canvas
+func (c *Canvas) ToImage() image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, c.Width, c.Height))
+	for y := range c.Data {
+		for x := range c.Data[y] {
+			canvasColor := c.Data[y][x]
+			red, green, blue := canvasColor.Normalize()
+			img.Set(x, y, color.RGBA{uint8(red), uint8(green), uint8(blue), 255})
+		}
+	}
+	return img
 }
 
 // WritePixel sets a pixel on the canvas to a color
