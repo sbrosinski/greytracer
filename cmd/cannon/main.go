@@ -5,7 +5,7 @@ import (
 	"image/png"
 	"os"
 
-	"github.com/sbrosinski/graytracer/internal/trace"
+	"github.com/sbrosinski/greytracer/internal/trace"
 )
 
 // Projectile has a position (a point) and a velocity (a vector)
