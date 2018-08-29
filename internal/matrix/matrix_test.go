@@ -1,9 +1,9 @@
 package matrix
 
 import (
-	"fmt"
 	"testing"
 
+	"github.com/sbrosinski/greytracer/internal/trace"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,6 +46,17 @@ func TestMultiply(t *testing.T) {
 		| 45 | 94 | 188 | 376 |
 	`
 	result := Multiply(Parse(a), Parse(b))
-	fmt.Println(result)
-	assert.True(t, Equal(Parse(c), result))
+	assert.Equal(t, Parse(c), result)
+}
+
+func TestMultiplyWithTuple(t *testing.T) {
+	a := `
+		| 1 | 2 | 3 | 4 |
+		| 2 | 4 | 4 | 2 |
+		| 8 | 6 | 4 | 1 |
+		| 0 | 0 | 0 | 1 |
+	`
+	tuple := trace.Tuple{X: 1, Y: 2, Z: 3, W: 1}
+	result := MultiplyWithTuple(Parse(a), tuple)
+	assert.Equal(t, trace.Tuple{X: 18, Y: 24, Z: 33, W: 1}, result)
 }

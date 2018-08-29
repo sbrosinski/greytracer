@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/sbrosinski/greytracer/internal/trace"
 )
 
 // Matrix describes a 2d matrix
@@ -35,6 +37,19 @@ func Multiply(a, b Matrix) Matrix {
 		}
 	}
 	return Matrix{rows: a.rows, cols: a.cols, elements: result, step: a.cols}
+}
+
+// MultiplyWithTuple multiplies a matrix with a tuple
+func MultiplyWithTuple(a Matrix, t trace.Tuple) trace.Tuple {
+	var result []float64
+	for row := 0; row < a.rows; row++ {
+		rowProduct := a.At(row, 0)*t.X +
+			a.At(row, 1)*t.Y +
+			a.At(row, 2)*t.Z +
+			a.At(row, 3)*t.W
+		result = append(result, rowProduct)
+	}
+	return trace.Tuple{X: result[0], Y: result[1], Z: result[2], W: result[3]}
 }
 
 // Equal checks if to matrix are equal, slow for now since it's using reflection
