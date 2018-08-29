@@ -19,6 +19,9 @@ type Matrix struct {
 	step int
 }
 
+// Identidy4x4 defines a 4x4 identidy matrix
+var Identidy4x4 = Matrix{rows: 4, cols: 4, elements: []float64{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}, step: 4}
+
 // At returns the value of the matrix at this row and column
 func (m Matrix) At(row, col int) float64 {
 	return m.elements[row*m.step+col]
@@ -50,6 +53,51 @@ func MultiplyWithTuple(a Matrix, t trace.Tuple) trace.Tuple {
 		result = append(result, rowProduct)
 	}
 	return trace.Tuple{X: result[0], Y: result[1], Z: result[2], W: result[3]}
+}
+
+// Transpose switches rows and columns of a matrix
+func Transpose(a Matrix) Matrix {
+	var result []float64
+	for col := 0; col < a.cols; col++ {
+		for row := 0; row < a.rows; row++ {
+			result = append(result, a.At(row, col))
+		}
+	}
+	return Matrix{rows: a.rows, cols: a.cols, elements: result, step: a.cols}
+}
+
+// Determinant calculates the determinant of a 2x2 matrix
+func Determinant(a Matrix) float64 {
+	return a.At(0, 0)*a.At(1, 1) - a.At(0, 1)*a.At(1, 0)
+}
+
+// Submatrix returns a submatrix by removing row and col
+func Submatrix(a Matrix, removeRow, removeCol int) Matrix {
+	var result []float64
+	for row := 0; row < a.rows; row++ {
+		for col := 0; col < a.cols; col++ {
+			if row != removeRow && col != removeCol {
+				result = append(result, a.At(row, col))
+			}
+		}
+	}
+	return Matrix{rows: a.rows - 1, cols: a.cols - 1, elements: result, step: a.cols - 1}
+}
+
+// Minor calculates the minor of a matrix at a row, col.
+// The minor of an element at row i and column j is the determinant of the submatrix at (i,j).
+func Minor(a Matrix, atRow, atCol int) float64 {
+	return Determinant(Submatrix(a, atRow, atCol))
+}
+
+// Cofactor calculates the cofactor of a matrix at row, col.
+func Cofactor(a Matrix, atRow, atCol int) float64 {
+	minor := Minor(a, atRow, atCol)
+	if atRow+atCol%2 != 0 {
+		return minor * -1.0
+	} else {
+		return minor
+	}
 }
 
 // Equal checks if to matrix are equal, slow for now since it's using reflection
