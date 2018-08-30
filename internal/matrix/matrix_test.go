@@ -39,14 +39,14 @@ func TestMultiply(t *testing.T) {
 		| 2 | 4 | 8  | 16 |
 		| 4 | 8 | 16 | 32 |
 	`
-	c := `
+	expected := `
 		| 24 | 49 | 98  | 196 |
 		| 31 | 64 | 128 | 256 |
 		| 38 | 79 | 158 | 316 |
 		| 45 | 94 | 188 | 376 |
 	`
 	result := Multiply(Parse(a), Parse(b))
-	assert.Equal(t, Parse(c), result)
+	assert.Equal(t, Parse(expected), result)
 }
 
 func TestMultiplyWithTuple(t *testing.T) {
