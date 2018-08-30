@@ -2,7 +2,6 @@ package matrix
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 	"strings"
 
@@ -66,9 +65,17 @@ func Transpose(a Matrix) Matrix {
 	return Matrix{rows: a.rows, cols: a.cols, elements: result, step: a.cols}
 }
 
-// Determinant calculates the determinant of a 2x2 matrix
+// Determinant calculates the determinant of amatrix
 func Determinant(a Matrix) float64 {
-	return a.At(0, 0)*a.At(1, 1) - a.At(0, 1)*a.At(1, 0)
+	if a.rows == 2 && a.cols == 2 {
+		return a.At(0, 0)*a.At(1, 1) - a.At(0, 1)*a.At(1, 0)
+	}
+	var result float64
+	for col := 0; col < a.cols; col++ {
+		cofactor := Cofactor(a, 0, col)
+		result += a.At(0, col) * cofactor
+	}
+	return result
 }
 
 // Submatrix returns a submatrix by removing row and col
@@ -93,16 +100,62 @@ func Minor(a Matrix, atRow, atCol int) float64 {
 // Cofactor calculates the cofactor of a matrix at row, col.
 func Cofactor(a Matrix, atRow, atCol int) float64 {
 	minor := Minor(a, atRow, atCol)
-	if atRow+atCol%2 != 0 {
+	fmt.Printf("%d %d\n", (atRow + atCol), (atRow+atCol)%2)
+	if (atRow+atCol)%2 != 0 {
 		return minor * -1.0
-	} else {
-		return minor
 	}
+	return minor
 }
 
-// Equal checks if to matrix are equal, slow for now since it's using reflection
+// IsInvertible checks if a matrix is invertible
+func IsInvertible(a Matrix) bool {
+	return Determinant(a) != 0.0
+}
+
+// Inverse inverts a matrix
+func Inverse(a Matrix) Matrix {
+	var cofactorElements []float64
+	for row := 0; row < a.rows; row++ {
+		for col := 0; col < a.cols; col++ {
+			cofactor := Cofactor(a, row, col)
+			fmt.Println("c", cofactor)
+			cofactorElements = append(cofactorElements, cofactor)
+		}
+	}
+	cofactorMatrix := Matrix{rows: a.rows, cols: a.cols, elements: cofactorElements, step: a.cols}
+	fmt.Println(cofactorMatrix)
+	transposedCofactorMatrix := Transpose(cofactorMatrix)
+	determinentOfA := Determinant(a)
+	var inversedElements []float64
+	for row := 0; row < transposedCofactorMatrix.rows; row++ {
+		for col := 0; col < transposedCofactorMatrix.cols; col++ {
+			inversedElements = append(inversedElements, transposedCofactorMatrix.At(row, col)/determinentOfA)
+		}
+	}
+	return Matrix{rows: a.rows, cols: a.cols, elements: inversedElements, step: a.cols}
+}
+
+// Equal checks if to matrix are equal
 func Equal(a, b Matrix) bool {
-	return reflect.DeepEqual(a, b)
+	if a.cols != b.cols || a.rows != b.rows {
+		return false
+	}
+	for row := 0; row < a.rows; row++ {
+		for col := 0; col < a.cols; col++ {
+			if !floatEquals(a.At(row, col), b.At(row, col)) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func floatEquals(a, b float64) bool {
+	diff := 0.00001
+	if (a-b) < diff && (b-a) < diff {
+		return true
+	}
+	return false
 }
 
 // Parse creates a matrix from a string
@@ -130,7 +183,5 @@ func Parse(s string) Matrix {
 		}
 	}
 	colCount := valueCount / rowCount
-
-	fmt.Printf("%d-%d %v\n", rowCount, colCount, elements)
 	return Matrix{rows: rowCount, cols: colCount, elements: elements, step: colCount}
 }
