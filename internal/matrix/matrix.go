@@ -18,6 +18,11 @@ type Matrix struct {
 	step int
 }
 
+// New4X4 creates a new 4x4 matrix
+func New4X4(elements ...float64) Matrix {
+	return Matrix{4, 4, elements, 4}
+}
+
 // Identidy4x4 defines a 4x4 identidy matrix
 var Identidy4x4 = Matrix{rows: 4, cols: 4, elements: []float64{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}, step: 4}
 

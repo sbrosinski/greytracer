@@ -79,9 +79,20 @@ func (tpl *Tuple) Equals(t Tuple) bool {
 	return tpl.X == t.X && tpl.Y == t.Y && tpl.Z == t.Z && tpl.W == t.W
 }
 
-// Equals checks if this tuple is equal to t
+// Equals2 checks if this tuple is equal to t
 func Equals2(a Tuple, b Tuple) bool {
-	return a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W
+	return floatEquals(a.X, b.X) &&
+		floatEquals(a.Y, b.Y) &&
+		floatEquals(a.Z, b.Z) &&
+		floatEquals(a.W, b.W)
+}
+
+func floatEquals(a, b float64) bool {
+	diff := 0.00001
+	if (a-b) < diff && (b-a) < diff {
+		return true
+	}
+	return false
 }
 
 // NewPoint creates a new tuple which is a point
