@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/png"
+	"os"
 	"strings"
 )
 
@@ -72,13 +74,13 @@ func (c *Canvas) WritePixel(x int, y int, color Color) {
 	if x >= 0 && x < c.Width && y >= 0 && y < c.Height {
 		c.Data[y][x] = color
 	} else {
-		//panic(fmt.Errorf("%d, %d is outside canvas %d,%d", x, y, c.Width, c.Height))
+		panic(fmt.Errorf("%d, %d is outside canvas %d,%d", x, y, c.Width, c.Height))
 	}
 }
 
 // PixelAt gets the color of a canvas at x/y
 func (c *Canvas) PixelAt(x int, y int) Color {
-	return c.Data[x][y]
+	return c.Data[y][x]
 }
 
 func (c *Canvas) String() string {
@@ -87,4 +89,18 @@ func (c *Canvas) String() string {
 		out.WriteString(fmt.Sprintf("row(%v)  -  %v\n", y, c.Data[y]))
 	}
 	return out.String()
+}
+
+// SavePNG saves the canvas as a PNG file
+func (c *Canvas) SavePNG(path string) error {
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	err = png.Encode(f, c.ToImage())
+	if err != nil {
+		return err
+	}
+	return nil
 }

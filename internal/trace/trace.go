@@ -5,8 +5,8 @@ import (
 )
 
 // TODO
-// func (tpl *Tuple) Multiply(t Tuple) Tuple
-// func (tpl *Tuple) Divide(t Tuple) Tuple
+// func (t *Tuple) Multiply(t Tuple) Tuple
+// func (t *Tuple) Divide(t Tuple) Tuple
 
 // Tuple describes a point in 3 dimensional space
 type Tuple struct {
@@ -24,59 +24,62 @@ func Add(a Tuple, b Tuple) Tuple {
 }
 
 // Add adds a tuple to this tuple
-func (tpl *Tuple) Add(t Tuple) Tuple {
+func (t *Tuple) Add(a Tuple) Tuple {
 	return Tuple{
-		tpl.X + t.X,
-		tpl.Y + t.Y,
-		tpl.Z + t.Z,
-		tpl.W + t.W}
+		t.X + a.X,
+		t.Y + a.Y,
+		t.Z + a.Z,
+		t.W + a.W}
 }
 
 // Subtract substracts a tuple from this tuple
-func (tpl *Tuple) Subtract(t Tuple) Tuple {
+func (t *Tuple) Subtract(a Tuple) Tuple {
 	return Tuple{
-		tpl.X - t.X,
-		tpl.Y - t.Y,
-		tpl.Z - t.Z,
-		tpl.W - t.W}
+		t.X - a.X,
+		t.Y - a.Y,
+		t.Z - a.Z,
+		t.W - a.W}
 }
 
 // Multiply multiplies a tuple from this tuple
-func (tpl *Tuple) Multiply(a float64) Tuple {
+func (t *Tuple) Multiply(a float64) Tuple {
 	return Tuple{
-		tpl.X * a,
-		tpl.Y * a,
-		tpl.Z * a,
-		tpl.W * a}
+		t.X * a,
+		t.Y * a,
+		t.Z * a,
+		t.W * a}
 }
 
 // Negate negates this tuple, subtracting it from the zero tuple
-func (tpl *Tuple) Negate() Tuple {
+func (t *Tuple) Negate() Tuple {
 	return Tuple{
-		0 - tpl.X,
-		0 - tpl.Y,
-		0 - tpl.Z,
-		0 - tpl.W}
+		0 - t.X,
+		0 - t.Y,
+		0 - t.Z,
+		0 - t.W}
 }
 
 // Magnitude calculates the magnitude of the vector described by t
-func (tpl *Tuple) Magnitude() float64 {
-	return math.Sqrt(tpl.X*tpl.X + tpl.Y*tpl.Y + tpl.Z*tpl.Z + tpl.W*tpl.W)
+func (t *Tuple) Magnitude() float64 {
+	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
 }
 
 // Normalize normalizes a vector
-func (tpl *Tuple) Normalize() Tuple {
-	var mag = tpl.Magnitude()
+func (t *Tuple) Normalize() Tuple {
+	var mag = t.Magnitude()
 	return Tuple{
-		tpl.X / mag,
-		tpl.Y / mag,
-		tpl.Z / mag,
-		tpl.W / mag}
+		t.X / mag,
+		t.Y / mag,
+		t.Z / mag,
+		t.W / mag}
 }
 
 // Equals checks if this tuple is equal to t
-func (tpl *Tuple) Equals(t Tuple) bool {
-	return tpl.X == t.X && tpl.Y == t.Y && tpl.Z == t.Z && tpl.W == t.W
+func (t *Tuple) Equals(a Tuple) bool {
+	return floatEquals(a.X, t.X) &&
+		floatEquals(a.Y, t.Y) &&
+		floatEquals(a.Z, t.Z) &&
+		floatEquals(a.W, t.W)
 }
 
 // Equals2 checks if this tuple is equal to t

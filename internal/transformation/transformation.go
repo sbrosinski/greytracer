@@ -32,3 +32,23 @@ func RotationX(rad float64) matrix.Matrix {
 		0, 0, 0, 1,
 	)
 }
+
+// RotationY returns a rotation matrix around the y axis by rad degrees
+func RotationY(rad float64) matrix.Matrix {
+	return matrix.New4X4(
+		math.Cos(rad), 0, math.Sin(rad), 0,
+		0, 1, 0, 0,
+		-math.Sin(rad), 0, math.Cos(rad), 0,
+		0, 0, 0, 1,
+	)
+}
+
+// RotationZ returns a rotation matrix around the z axis by rad degrees
+func RotationZ(rad float64) matrix.Matrix {
+	return matrix.New4X4(
+		math.Cos(rad), -math.Sin(rad), 0, 0,
+		math.Sin(rad), math.Cos(rad), 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1,
+	)
+}
