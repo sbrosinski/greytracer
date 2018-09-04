@@ -74,7 +74,7 @@ func (c *Canvas) WritePixel(x int, y int, color Color) {
 	if x >= 0 && x < c.Width && y >= 0 && y < c.Height {
 		c.Data[y][x] = color
 	} else {
-		panic(fmt.Errorf("%d, %d is outside canvas %d,%d", x, y, c.Width, c.Height))
+		fmt.Printf("%d, %d is outside canvas %d,%d", x, y, c.Width, c.Height)
 	}
 }
 
