@@ -5,7 +5,6 @@ import (
 )
 
 // TODO
-// func (t *Tuple) Multiply(t Tuple) Tuple
 // func (t *Tuple) Divide(t Tuple) Tuple
 
 // Tuple describes a point in 3 dimensional space
@@ -14,13 +13,14 @@ type Tuple struct {
 	W       float64
 }
 
-// Add adds a tuple to this tuple
-func Add(a Tuple, b Tuple) Tuple {
-	return Tuple{
-		a.X + b.X,
-		a.Y + b.Y,
-		a.Z + b.Z,
-		a.W + b.W}
+// NewPoint creates a new tuple which is a point
+func NewPoint(x float64, y float64, z float64) Tuple {
+	return Tuple{x, y, z, 1.0}
+}
+
+// NewVector creates a new tuple which is a vector
+func NewVector(x float64, y float64, z float64) Tuple {
+	return Tuple{x, y, z, 0.0}
 }
 
 // Add adds a tuple to this tuple
@@ -74,24 +74,17 @@ func (t *Tuple) Normalize() Tuple {
 		t.W / mag}
 }
 
-func Dot(a, b Tuple) float64 {
-	return a.X*b.X + a.Y*b.Y + a.Z*b.Z + a.W*b.W
+// Dot calculates the dot project with another tuple
+func (t *Tuple) Dot(a Tuple) float64 {
+	return a.X*t.X + a.Y*t.Y + a.Z*t.Z + a.W*t.W
 }
 
-// Equals checks if this tuple is equal to t
+// Equals checks if this tuple is mostly equal to t
 func (t *Tuple) Equals(a Tuple) bool {
 	return floatEquals(a.X, t.X) &&
 		floatEquals(a.Y, t.Y) &&
 		floatEquals(a.Z, t.Z) &&
 		floatEquals(a.W, t.W)
-}
-
-// Equals2 checks if this tuple is equal to t
-func Equals2(a Tuple, b Tuple) bool {
-	return floatEquals(a.X, b.X) &&
-		floatEquals(a.Y, b.Y) &&
-		floatEquals(a.Z, b.Z) &&
-		floatEquals(a.W, b.W)
 }
 
 func floatEquals(a, b float64) bool {
@@ -100,14 +93,4 @@ func floatEquals(a, b float64) bool {
 		return true
 	}
 	return false
-}
-
-// NewPoint creates a new tuple which is a point
-func NewPoint(x float64, y float64, z float64) Tuple {
-	return Tuple{x, y, z, 1.0}
-}
-
-// NewVector creates a new tuple which is a vector
-func NewVector(x float64, y float64, z float64) Tuple {
-	return Tuple{x, y, z, 0.0}
 }

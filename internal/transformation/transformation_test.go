@@ -23,11 +23,14 @@ func TestMultiplyingByTanslation(t *testing.T) {
 func TestRotationPointAroundX(t *testing.T) {
 	p := trace.NewPoint(0, 1, 0)
 	halfQuarter := transformation.RotationX(math.Pi / 4)
-	fullQuarter := transformation.RotationX(math.Pi / 2)
 	pHalfQuarter := matrix.MultiplyWithTuple(halfQuarter, p)
+	expectedHalfQuart := trace.NewPoint(0, math.Sqrt2/2, math.Sqrt2/2)
+	assert.True(t, expectedHalfQuart.Equals(pHalfQuarter))
+
+	fullQuarter := transformation.RotationX(math.Pi / 2)
 	pFullQuarter := matrix.MultiplyWithTuple(fullQuarter, p)
-	assert.True(t, trace.Equals2(trace.NewPoint(0, math.Sqrt2/2, math.Sqrt2/2), pHalfQuarter))
-	assert.True(t, trace.Equals2(trace.NewPoint(0, 0, 1), pFullQuarter))
+	expectedFullQuart := trace.NewPoint(0, 0, 1)
+	assert.True(t, expectedFullQuart.Equals(pFullQuarter))
 }
 
 func TestInverseXRotationRotatesOppositeDirection(t *testing.T) {
@@ -35,25 +38,32 @@ func TestInverseXRotationRotatesOppositeDirection(t *testing.T) {
 	halfQuarter := transformation.RotationX(math.Pi / 4)
 	inv := matrix.Inverse(halfQuarter)
 	pHalfQuarterInvers := matrix.MultiplyWithTuple(inv, v)
-	assert.True(t, trace.Equals2(trace.NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2), pHalfQuarterInvers))
+	expected := trace.NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2)
+	assert.True(t, expected.Equals(pHalfQuarterInvers))
 }
 
 func TestRotationAroundY(t *testing.T) {
 	p := trace.NewPoint(0, 0, 1)
 	halfQuarter := transformation.RotationY(math.Pi / 4)
-	fullQuarter := transformation.RotationY(math.Pi / 2)
 	pHalfQuarter := matrix.MultiplyWithTuple(halfQuarter, p)
+	expectedHalfQuart := trace.NewPoint(math.Sqrt2/2, 0, math.Sqrt2/2)
+	assert.True(t, expectedHalfQuart.Equals(pHalfQuarter))
+
+	fullQuarter := transformation.RotationY(math.Pi / 2)
 	pFullQuarter := matrix.MultiplyWithTuple(fullQuarter, p)
-	assert.True(t, trace.Equals2(trace.NewPoint(math.Sqrt2/2, 0, math.Sqrt2/2), pHalfQuarter))
-	assert.True(t, trace.Equals2(trace.NewPoint(1, 0, 0), pFullQuarter))
+	expectedFullQuart := trace.NewPoint(1, 0, 0)
+	assert.True(t, expectedFullQuart.Equals(pFullQuarter))
 }
 
 func TestRotationAroundZ(t *testing.T) {
 	p := trace.NewPoint(0, 1, 0)
 	halfQuarter := transformation.RotationZ(math.Pi / 4)
-	fullQuarter := transformation.RotationZ(math.Pi / 2)
 	pHalfQuarter := matrix.MultiplyWithTuple(halfQuarter, p)
+	expectedHalfQuart := trace.NewPoint(-math.Sqrt2/2, math.Sqrt2/2, 0)
+	assert.True(t, expectedHalfQuart.Equals(pHalfQuarter))
+
+	fullQuarter := transformation.RotationZ(math.Pi / 2)
 	pFullQuarter := matrix.MultiplyWithTuple(fullQuarter, p)
-	assert.True(t, trace.Equals2(trace.NewPoint(-math.Sqrt2/2, math.Sqrt2/2, 0), pHalfQuarter))
-	assert.True(t, trace.Equals2(trace.NewPoint(-1, 0, 0), pFullQuarter))
+	expectedFullQuart := trace.NewPoint(-1, 0, 0)
+	assert.True(t, expectedFullQuart.Equals(pFullQuarter))
 }
