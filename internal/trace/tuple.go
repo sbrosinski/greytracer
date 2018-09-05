@@ -74,6 +74,10 @@ func (t *Tuple) Normalize() Tuple {
 		t.W / mag}
 }
 
+func Dot(a, b Tuple) float64 {
+	return a.X*b.X + a.Y*b.Y + a.Z*b.Z + a.W*b.W
+}
+
 // Equals checks if this tuple is equal to t
 func (t *Tuple) Equals(a Tuple) bool {
 	return floatEquals(a.X, t.X) &&
