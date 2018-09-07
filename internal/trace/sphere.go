@@ -7,7 +7,7 @@ import (
 type Sphere struct {
 }
 
-func (s *Sphere) intersect(ray Ray) []float64 {
+func (s *Sphere) intersect(ray Ray) Intersections {
 	sphereToRay := ray.origin.Subtract(NewPoint(0, 0, 0))
 	a := ray.direction.Dot(ray.direction)
 	b := 2 * ray.direction.Dot(sphereToRay)
@@ -15,7 +15,7 @@ func (s *Sphere) intersect(ray Ray) []float64 {
 	discriminant := b*b - 4*a*c
 
 	if discriminant < 0 {
-		return []float64{}
+		return NewIntersections()
 	}
 
 	t1 := (-b - math.Sqrt(discriminant)) / (2 * a)
@@ -23,5 +23,5 @@ func (s *Sphere) intersect(ray Ray) []float64 {
 	if t1 > t2 {
 		t1, t2 = t2, t1
 	}
-	return []float64{t1, t2}
+	return NewIntersections(Intersection{object: s, t: t1}, Intersection{object: s, t: t2})
 }
