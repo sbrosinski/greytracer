@@ -7,14 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCanvasCreation(t *testing.T) {
-	t.Log("test")
-	data := NewCanvas(5, 3).Data
-	for y := range data {
-		t.Logf("row(%v)  -  %v\n", y, data[y])
-	}
-}
-
 func TestWritingPixelsToCanvas(t *testing.T) {
 
 	c := NewCanvas(10, 20)
@@ -41,7 +33,6 @@ func TestConstructingPPMPixelData(t *testing.T) {
 	c.WritePixel(2, 1, Color{0, 0.5, 0})
 	c.WritePixel(4, 2, Color{-0.5, 0, 1})
 	ppm := c.ToPPM()
-	t.Log(ppm)
 	lines := strings.Split(ppm, "\n")
 	assert.Equal(t, `"""`, lines[3])
 	assert.Equal(t, "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0", lines[4])
@@ -59,7 +50,6 @@ func TestSplittingLongLinesInPPMFiles(t *testing.T) {
 		}
 	}
 	ppm := c.ToPPM()
-	t.Log(ppm)
 	lines := strings.Split(ppm, "\n")
 	assert.Equal(t, `"""`, lines[3])
 	assert.Equal(t, "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153", lines[4])

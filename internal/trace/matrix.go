@@ -1,7 +1,6 @@
 package trace
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -103,7 +102,6 @@ func Minor(a Matrix, atRow, atCol int) float64 {
 // Cofactor calculates the cofactor of a matrix at row, col.
 func Cofactor(a Matrix, atRow, atCol int) float64 {
 	minor := Minor(a, atRow, atCol)
-	fmt.Printf("%d %d\n", (atRow + atCol), (atRow+atCol)%2)
 	if (atRow+atCol)%2 != 0 {
 		return minor * -1.0
 	}
@@ -121,12 +119,10 @@ func Inverse(a Matrix) Matrix {
 	for row := 0; row < a.rows; row++ {
 		for col := 0; col < a.cols; col++ {
 			cofactor := Cofactor(a, row, col)
-			fmt.Println("c", cofactor)
 			cofactorElements = append(cofactorElements, cofactor)
 		}
 	}
 	cofactorMatrix := Matrix{rows: a.rows, cols: a.cols, elements: cofactorElements, step: a.cols}
-	fmt.Println(cofactorMatrix)
 	transposedCofactorMatrix := Transpose(cofactorMatrix)
 	determinentOfA := Determinant(a)
 	var inversedElements []float64

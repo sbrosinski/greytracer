@@ -4,13 +4,20 @@ import (
 	"math"
 )
 
-type Sphere struct {
+type sphere struct {
+	Transform Matrix
 }
 
-func (s *Sphere) intersect(ray Ray) Intersections {
-	sphereToRay := ray.origin.Subtract(NewPoint(0, 0, 0))
-	a := ray.direction.Dot(ray.direction)
-	b := 2 * ray.direction.Dot(sphereToRay)
+func NewSphere() sphere {
+	return sphere{Transform: Identidy4x4}
+}
+
+func (s *sphere) Intersect(ray Ray) Intersections {
+	transRay := ray.Transform(Inverse(s.Transform))
+
+	sphereToRay := transRay.origin.Subtract(NewPoint(0, 0, 0))
+	a := transRay.direction.Dot(transRay.direction)
+	b := 2 * transRay.direction.Dot(sphereToRay)
 	c := sphereToRay.Dot(sphereToRay) - 1
 	discriminant := b*b - 4*a*c
 
