@@ -14,6 +14,11 @@ func (r *Ray) Position(t float64) Tuple {
 	return r.origin.Add(distanceTraveled)
 }
 
+func (r *Ray) Transform(trans Matrix) Ray {
+	return Ray{
+		origin: MultiplyWithTuple(trans, r.origin), direction: MultiplyWithTuple(trans, r.direction)}
+}
+
 type Intersection struct {
 	t      float64
 	object interface{}

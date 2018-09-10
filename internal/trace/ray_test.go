@@ -51,3 +51,19 @@ func TestHitAlwaysLowestNonNegative(t *testing.T) {
 	i, _ := xs.hit()
 	assert.Equal(t, i4, i)
 }
+
+func TestTranslatingRay(t *testing.T) {
+	r := Ray{NewPoint(1, 2, 3), NewVector(0, 1, 0)}
+	m := Translation(3, 4, 5)
+	r2 := r.Transform(m)
+	assert.Equal(t, NewPoint(4, 6, 8), r2.origin)
+	assert.Equal(t, NewVector(0, 1, 0), r2.direction)
+}
+
+func TestScalingRay(t *testing.T) {
+	r := Ray{NewPoint(1, 2, 3), NewVector(0, 1, 0)}
+	m := Scaling(2, 3, 4)
+	r2 := r.Transform(m)
+	assert.Equal(t, NewPoint(2, 6, 12), r2.origin)
+	assert.Equal(t, NewVector(0, 3, 0), r2.direction)
+}

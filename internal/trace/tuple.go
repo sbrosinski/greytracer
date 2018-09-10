@@ -86,11 +86,3 @@ func (t *Tuple) Equals(a Tuple) bool {
 		floatEquals(a.Z, t.Z) &&
 		floatEquals(a.W, t.W)
 }
-
-func floatEquals(a, b float64) bool {
-	diff := 0.00001
-	if (a-b) < diff && (b-a) < diff {
-		return true
-	}
-	return false
-}

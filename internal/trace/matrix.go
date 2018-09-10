@@ -1,11 +1,9 @@
-package matrix
+package trace
 
 import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	"github.com/sbrosinski/greytracer/internal/trace"
 )
 
 // Matrix describes a 2d matrix
@@ -47,7 +45,7 @@ func Multiply(a, b Matrix) Matrix {
 }
 
 // MultiplyWithTuple multiplies a matrix with a tuple
-func MultiplyWithTuple(a Matrix, t trace.Tuple) trace.Tuple {
+func MultiplyWithTuple(a Matrix, t Tuple) Tuple {
 	var result []float64
 	for row := 0; row < a.rows; row++ {
 		rowProduct := a.At(row, 0)*t.X +
@@ -56,7 +54,7 @@ func MultiplyWithTuple(a Matrix, t trace.Tuple) trace.Tuple {
 			a.At(row, 3)*t.W
 		result = append(result, rowProduct)
 	}
-	return trace.Tuple{X: result[0], Y: result[1], Z: result[2], W: result[3]}
+	return Tuple{X: result[0], Y: result[1], Z: result[2], W: result[3]}
 }
 
 // Transpose switches rows and columns of a matrix

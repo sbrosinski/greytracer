@@ -1,9 +1,8 @@
-package matrix
+package trace
 
 import (
 	"testing"
 
-	"github.com/sbrosinski/greytracer/internal/trace"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -56,9 +55,9 @@ func TestMultiplyWithTuple(t *testing.T) {
 		| 8 | 6 | 4 | 1 |
 		| 0 | 0 | 0 | 1 |
 	`
-	tuple := trace.Tuple{X: 1, Y: 2, Z: 3, W: 1}
+	tuple := Tuple{X: 1, Y: 2, Z: 3, W: 1}
 	result := MultiplyWithTuple(Parse(a), tuple)
-	assert.Equal(t, trace.Tuple{X: 18, Y: 24, Z: 33, W: 1}, result)
+	assert.Equal(t, Tuple{X: 18, Y: 24, Z: 33, W: 1}, result)
 }
 
 func TestMultiplyingMatrixByIdentity(t *testing.T) {
@@ -73,7 +72,7 @@ func TestMultiplyingMatrixByIdentity(t *testing.T) {
 }
 
 func TestMultiplyingIdentityByTuple(t *testing.T) {
-	tuple := trace.Tuple{X: 1, Y: 2, Z: 3, W: 4}
+	tuple := Tuple{X: 1, Y: 2, Z: 3, W: 4}
 	result := MultiplyWithTuple(Identidy4x4, tuple)
 	assert.Equal(t, tuple, result)
 }

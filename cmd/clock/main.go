@@ -3,9 +3,7 @@ package main
 import (
 	"math"
 
-	"github.com/sbrosinski/greytracer/internal/matrix"
 	"github.com/sbrosinski/greytracer/internal/trace"
-	"github.com/sbrosinski/greytracer/internal/transformation"
 )
 
 var canvas = trace.NewCanvas(250, 250)
@@ -13,9 +11,9 @@ var canvas = trace.NewCanvas(250, 250)
 func main() {
 
 	for hour := 1; hour <= 12; hour++ {
-		rotate := transformation.RotationY(float64(hour) * math.Pi / 6)
+		rotate := trace.RotationY(float64(hour) * math.Pi / 6)
 		twelve := trace.NewPoint(0, 0, 1)
-		hourPoint := matrix.MultiplyWithTuple(rotate, twelve)
+		hourPoint := trace.MultiplyWithTuple(rotate, twelve)
 		writeThickPixe(3, int(hourPoint.X*3/8*float64(canvas.Width)+125.0), int(hourPoint.Z*3/8*float64(canvas.Width)+125))
 	}
 
