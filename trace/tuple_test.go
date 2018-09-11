@@ -68,3 +68,17 @@ func TestNormalize(t *testing.T) {
 	var v1Norm = v1.Normalize()
 	assert.Equal(t, NewVector(1, 0, 0), v1Norm)
 }
+
+func TestReflectingVectorApproachingAt45Degrees(t *testing.T) {
+	v := NewVector(1, -1, 0)
+	n := NewVector(0, 1, 0)
+	r := v.Reflect(n)
+	assert.Equal(t, NewVector(1, 1, 0), r)
+}
+
+func TestReflectingVectorOfSlantedSurface(t *testing.T) {
+	v := NewVector(0, -1, 0)
+	n := NewVector(math.Sqrt2/2, math.Sqrt2/2, 0)
+	r := v.Reflect(n)
+	assert.True(t, r.Equals(NewVector(1, 0, 0)))
+}

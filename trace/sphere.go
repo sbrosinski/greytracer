@@ -33,6 +33,11 @@ func (s *sphere) Intersect(ray Ray) Intersections {
 	return NewIntersections(Intersection{object: s, t: t1}, Intersection{object: s, t: t2})
 }
 
-func (s *sphere) NormalAt(worldPoint Tuple) {
-
+func (s *sphere) NormalAt(worldPoint Tuple) Tuple {
+	invTransf := s.Transform.Inverse()
+	objectPoint := invTransf.MultiplyWithTuple(worldPoint)
+	objectNormal := objectPoint.Subtract(NewPoint(0, 0, 0))
+	invTransfTransposed := invTransf.Transpose()
+	worldNormal := invTransfTransposed.MultiplyWithTuple(objectNormal)
+	return worldNormal.Normalize()
 }

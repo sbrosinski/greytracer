@@ -86,3 +86,10 @@ func (t *Tuple) Equals(a Tuple) bool {
 		floatEquals(a.Z, t.Z) &&
 		floatEquals(a.W, t.W)
 }
+
+func (t *Tuple) Reflect(normal Tuple) Tuple {
+	doubled := normal.Multiply(2.0)
+	dot := t.Dot(normal)
+	multiplyByDot := doubled.Multiply(dot)
+	return t.Subtract(multiplyByDot)
+}
