@@ -3,7 +3,7 @@ package main
 import (
 	"math"
 
-	"github.com/sbrosinski/greytracer/internal/trace"
+	"github.com/sbrosinski/greytracer/trace"
 )
 
 var canvas = trace.NewCanvas(100, 100)
