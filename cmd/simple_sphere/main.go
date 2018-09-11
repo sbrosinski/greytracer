@@ -12,7 +12,7 @@ func main() {
 	sphere := trace.NewSphere()
 	scale := trace.Scaling(1, 0.5, 1)
 	rotate := trace.RotationZ(math.Pi / 4)
-	sphere.Transform = trace.Multiply(rotate, scale)
+	sphere.Transform = rotate.Multiply(scale)
 
 	rayOrigin := trace.NewPoint(0, 0, -5)
 	wallZ := 10.0

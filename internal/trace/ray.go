@@ -20,7 +20,7 @@ func (r *Ray) Position(t float64) Tuple {
 
 func (r *Ray) Transform(trans Matrix) Ray {
 	return Ray{
-		origin: MultiplyWithTuple(trans, r.origin), direction: MultiplyWithTuple(trans, r.direction)}
+		origin: trans.MultiplyWithTuple(r.origin), direction: trans.MultiplyWithTuple(r.direction)}
 }
 
 type Intersection struct {

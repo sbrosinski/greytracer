@@ -13,7 +13,7 @@ func main() {
 	for hour := 1; hour <= 12; hour++ {
 		rotate := trace.RotationY(float64(hour) * math.Pi / 6)
 		twelve := trace.NewPoint(0, 0, 1)
-		hourPoint := trace.MultiplyWithTuple(rotate, twelve)
+		hourPoint := rotate.MultiplyWithTuple(twelve)
 		writeThickPixe(3, int(hourPoint.X*3/8*float64(canvas.Width)+125.0), int(hourPoint.Z*3/8*float64(canvas.Width)+125))
 	}
 

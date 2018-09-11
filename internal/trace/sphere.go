@@ -13,7 +13,7 @@ func NewSphere() sphere {
 }
 
 func (s *sphere) Intersect(ray Ray) Intersections {
-	transRay := ray.Transform(Inverse(s.Transform))
+	transRay := ray.Transform(s.Transform.Inverse())
 
 	sphereToRay := transRay.origin.Subtract(NewPoint(0, 0, 0))
 	a := transRay.direction.Dot(transRay.direction)
@@ -31,4 +31,8 @@ func (s *sphere) Intersect(ray Ray) Intersections {
 		t1, t2 = t2, t1
 	}
 	return NewIntersections(Intersection{object: s, t: t1}, Intersection{object: s, t: t2})
+}
+
+func (s *sphere) NormalAt(worldPoint Tuple) {
+
 }

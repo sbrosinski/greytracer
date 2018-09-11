@@ -24,19 +24,19 @@ func New4X4(elements ...float64) Matrix {
 var Identidy4x4 = Matrix{rows: 4, cols: 4, elements: []float64{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}, step: 4}
 
 // At returns the value of the matrix at this row and column
-func (m Matrix) At(row, col int) float64 {
+func (m *Matrix) At(row, col int) float64 {
 	return m.elements[row*m.step+col]
 }
 
 // Multiply multiplies matrix a with b, need to be the same size
-func Multiply(a, b Matrix) Matrix {
+func (m *Matrix) Multiply(a Matrix) Matrix {
 	var result []float64
-	for row := 0; row < a.rows; row++ {
-		for col := 0; col < a.cols; col++ {
-			product := a.At(row, 0)*b.At(0, col) +
-				a.At(row, 1)*b.At(1, col) +
-				a.At(row, 2)*b.At(2, col) +
-				a.At(row, 3)*b.At(3, col)
+	for row := 0; row < m.rows; row++ {
+		for col := 0; col < m.cols; col++ {
+			product := m.At(row, 0)*a.At(0, col) +
+				m.At(row, 1)*a.At(1, col) +
+				m.At(row, 2)*a.At(2, col) +
+				m.At(row, 3)*a.At(3, col)
 			result = append(result, product)
 		}
 	}
@@ -44,64 +44,65 @@ func Multiply(a, b Matrix) Matrix {
 }
 
 // MultiplyWithTuple multiplies a matrix with a tuple
-func MultiplyWithTuple(a Matrix, t Tuple) Tuple {
+func (m *Matrix) MultiplyWithTuple(t Tuple) Tuple {
 	var result []float64
-	for row := 0; row < a.rows; row++ {
-		rowProduct := a.At(row, 0)*t.X +
-			a.At(row, 1)*t.Y +
-			a.At(row, 2)*t.Z +
-			a.At(row, 3)*t.W
+	for row := 0; row < m.rows; row++ {
+		rowProduct := m.At(row, 0)*t.X +
+			m.At(row, 1)*t.Y +
+			m.At(row, 2)*t.Z +
+			m.At(row, 3)*t.W
 		result = append(result, rowProduct)
 	}
 	return Tuple{X: result[0], Y: result[1], Z: result[2], W: result[3]}
 }
 
 // Transpose switches rows and columns of a matrix
-func Transpose(a Matrix) Matrix {
+func (m *Matrix) Transpose() Matrix {
 	var result []float64
-	for col := 0; col < a.cols; col++ {
-		for row := 0; row < a.rows; row++ {
-			result = append(result, a.At(row, col))
+	for col := 0; col < m.cols; col++ {
+		for row := 0; row < m.rows; row++ {
+			result = append(result, m.At(row, col))
 		}
 	}
-	return Matrix{rows: a.rows, cols: a.cols, elements: result, step: a.cols}
+	return Matrix{rows: m.rows, cols: m.cols, elements: result, step: m.cols}
 }
 
 // Determinant calculates the determinant of amatrix
-func Determinant(a Matrix) float64 {
-	if a.rows == 2 && a.cols == 2 {
-		return a.At(0, 0)*a.At(1, 1) - a.At(0, 1)*a.At(1, 0)
+func (m *Matrix) Determinant() float64 {
+	if m.rows == 2 && m.cols == 2 {
+		return m.At(0, 0)*m.At(1, 1) - m.At(0, 1)*m.At(1, 0)
 	}
 	var result float64
-	for col := 0; col < a.cols; col++ {
-		cofactor := Cofactor(a, 0, col)
-		result += a.At(0, col) * cofactor
+	for col := 0; col < m.cols; col++ {
+		cofactor := m.Cofactor(0, col)
+		result += m.At(0, col) * cofactor
 	}
 	return result
 }
 
 // Submatrix returns a submatrix by removing row and col
-func Submatrix(a Matrix, removeRow, removeCol int) Matrix {
+func (m *Matrix) Submatrix(removeRow, removeCol int) Matrix {
 	var result []float64
-	for row := 0; row < a.rows; row++ {
-		for col := 0; col < a.cols; col++ {
+	for row := 0; row < m.rows; row++ {
+		for col := 0; col < m.cols; col++ {
 			if row != removeRow && col != removeCol {
-				result = append(result, a.At(row, col))
+				result = append(result, m.At(row, col))
 			}
 		}
 	}
-	return Matrix{rows: a.rows - 1, cols: a.cols - 1, elements: result, step: a.cols - 1}
+	return Matrix{rows: m.rows - 1, cols: m.cols - 1, elements: result, step: m.cols - 1}
 }
 
 // Minor calculates the minor of a matrix at a row, col.
 // The minor of an element at row i and column j is the determinant of the submatrix at (i,j).
-func Minor(a Matrix, atRow, atCol int) float64 {
-	return Determinant(Submatrix(a, atRow, atCol))
+func (m *Matrix) Minor(atRow, atCol int) float64 {
+	sub := m.Submatrix(atRow, atCol)
+	return sub.Determinant()
 }
 
 // Cofactor calculates the cofactor of a matrix at row, col.
-func Cofactor(a Matrix, atRow, atCol int) float64 {
-	minor := Minor(a, atRow, atCol)
+func (m *Matrix) Cofactor(atRow, atCol int) float64 {
+	minor := m.Minor(atRow, atCol)
 	if (atRow+atCol)%2 != 0 {
 		return minor * -1.0
 	}
@@ -109,39 +110,39 @@ func Cofactor(a Matrix, atRow, atCol int) float64 {
 }
 
 // IsInvertible checks if a matrix is invertible
-func IsInvertible(a Matrix) bool {
-	return Determinant(a) != 0.0
+func (m *Matrix) IsInvertible() bool {
+	return m.Determinant() != 0.0
 }
 
 // Inverse inverts a matrix
-func Inverse(a Matrix) Matrix {
+func (m *Matrix) Inverse() Matrix {
 	var cofactorElements []float64
-	for row := 0; row < a.rows; row++ {
-		for col := 0; col < a.cols; col++ {
-			cofactor := Cofactor(a, row, col)
+	for row := 0; row < m.rows; row++ {
+		for col := 0; col < m.cols; col++ {
+			cofactor := m.Cofactor(row, col)
 			cofactorElements = append(cofactorElements, cofactor)
 		}
 	}
-	cofactorMatrix := Matrix{rows: a.rows, cols: a.cols, elements: cofactorElements, step: a.cols}
-	transposedCofactorMatrix := Transpose(cofactorMatrix)
-	determinentOfA := Determinant(a)
+	cofactorMatrix := Matrix{rows: m.rows, cols: m.cols, elements: cofactorElements, step: m.cols}
+	transposedCofactorMatrix := cofactorMatrix.Transpose()
+	determinentOfA := m.Determinant()
 	var inversedElements []float64
 	for row := 0; row < transposedCofactorMatrix.rows; row++ {
 		for col := 0; col < transposedCofactorMatrix.cols; col++ {
 			inversedElements = append(inversedElements, transposedCofactorMatrix.At(row, col)/determinentOfA)
 		}
 	}
-	return Matrix{rows: a.rows, cols: a.cols, elements: inversedElements, step: a.cols}
+	return Matrix{rows: m.rows, cols: m.cols, elements: inversedElements, step: m.cols}
 }
 
 // Equal checks if to matrix are equal
-func Equal(a, b Matrix) bool {
-	if a.cols != b.cols || a.rows != b.rows {
+func (m *Matrix) Equal(a Matrix) bool {
+	if a.cols != m.cols || a.rows != m.rows {
 		return false
 	}
 	for row := 0; row < a.rows; row++ {
 		for col := 0; col < a.cols; col++ {
-			if !floatEquals(a.At(row, col), b.At(row, col)) {
+			if !floatEquals(a.At(row, col), m.At(row, col)) {
 				return false
 			}
 		}
