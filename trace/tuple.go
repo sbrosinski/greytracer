@@ -24,7 +24,7 @@ func NewVector(x float64, y float64, z float64) Tuple {
 }
 
 // Add adds a tuple to this tuple
-func (t *Tuple) Add(a Tuple) Tuple {
+func (t Tuple) Add(a Tuple) Tuple {
 	return Tuple{
 		t.X + a.X,
 		t.Y + a.Y,
@@ -33,7 +33,7 @@ func (t *Tuple) Add(a Tuple) Tuple {
 }
 
 // Subtract substracts a tuple from this tuple
-func (t *Tuple) Subtract(a Tuple) Tuple {
+func (t Tuple) Subtract(a Tuple) Tuple {
 	return Tuple{
 		t.X - a.X,
 		t.Y - a.Y,
@@ -42,7 +42,7 @@ func (t *Tuple) Subtract(a Tuple) Tuple {
 }
 
 // Multiply multiplies a tuple from this tuple
-func (t *Tuple) Multiply(a float64) Tuple {
+func (t Tuple) Multiply(a float64) Tuple {
 	return Tuple{
 		t.X * a,
 		t.Y * a,
@@ -51,7 +51,7 @@ func (t *Tuple) Multiply(a float64) Tuple {
 }
 
 // Negate negates this tuple, subtracting it from the zero tuple
-func (t *Tuple) Negate() Tuple {
+func (t Tuple) Negate() Tuple {
 	return Tuple{
 		0 - t.X,
 		0 - t.Y,
@@ -60,12 +60,12 @@ func (t *Tuple) Negate() Tuple {
 }
 
 // Magnitude calculates the magnitude of the vector described by t
-func (t *Tuple) Magnitude() float64 {
+func (t Tuple) Magnitude() float64 {
 	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
 }
 
 // Normalize normalizes a vector
-func (t *Tuple) Normalize() Tuple {
+func (t Tuple) Normalize() Tuple {
 	var mag = t.Magnitude()
 	return Tuple{
 		t.X / mag,
@@ -75,21 +75,18 @@ func (t *Tuple) Normalize() Tuple {
 }
 
 // Dot calculates the dot project with another tuple
-func (t *Tuple) Dot(a Tuple) float64 {
+func (t Tuple) Dot(a Tuple) float64 {
 	return a.X*t.X + a.Y*t.Y + a.Z*t.Z + a.W*t.W
 }
 
 // Equals checks if this tuple is mostly equal to t
-func (t *Tuple) Equals(a Tuple) bool {
+func (t Tuple) Equals(a Tuple) bool {
 	return floatEquals(a.X, t.X) &&
 		floatEquals(a.Y, t.Y) &&
 		floatEquals(a.Z, t.Z) &&
 		floatEquals(a.W, t.W)
 }
 
-func (t *Tuple) Reflect(normal Tuple) Tuple {
-	doubled := normal.Multiply(2.0)
-	dot := t.Dot(normal)
-	multiplyByDot := doubled.Multiply(dot)
-	return t.Subtract(multiplyByDot)
+func (t Tuple) Reflect(normal Tuple) Tuple {
+	return t.Subtract(normal.Multiply(2.0).Multiply(t.Dot(normal)))
 }

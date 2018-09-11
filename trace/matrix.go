@@ -24,12 +24,12 @@ func New4X4(elements ...float64) Matrix {
 var Identidy4x4 = Matrix{rows: 4, cols: 4, elements: []float64{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}, step: 4}
 
 // At returns the value of the matrix at this row and column
-func (m *Matrix) At(row, col int) float64 {
+func (m Matrix) At(row, col int) float64 {
 	return m.elements[row*m.step+col]
 }
 
 // Multiply multiplies matrix a with b, need to be the same size
-func (m *Matrix) Multiply(a Matrix) Matrix {
+func (m Matrix) Multiply(a Matrix) Matrix {
 	var result []float64
 	for row := 0; row < m.rows; row++ {
 		for col := 0; col < m.cols; col++ {
@@ -44,7 +44,7 @@ func (m *Matrix) Multiply(a Matrix) Matrix {
 }
 
 // MultiplyWithTuple multiplies a matrix with a tuple
-func (m *Matrix) MultiplyWithTuple(t Tuple) Tuple {
+func (m Matrix) MultiplyWithTuple(t Tuple) Tuple {
 	var result []float64
 	for row := 0; row < m.rows; row++ {
 		rowProduct := m.At(row, 0)*t.X +
@@ -57,7 +57,7 @@ func (m *Matrix) MultiplyWithTuple(t Tuple) Tuple {
 }
 
 // Transpose switches rows and columns of a matrix
-func (m *Matrix) Transpose() Matrix {
+func (m Matrix) Transpose() Matrix {
 	var result []float64
 	for col := 0; col < m.cols; col++ {
 		for row := 0; row < m.rows; row++ {
@@ -68,7 +68,7 @@ func (m *Matrix) Transpose() Matrix {
 }
 
 // Determinant calculates the determinant of amatrix
-func (m *Matrix) Determinant() float64 {
+func (m Matrix) Determinant() float64 {
 	if m.rows == 2 && m.cols == 2 {
 		return m.At(0, 0)*m.At(1, 1) - m.At(0, 1)*m.At(1, 0)
 	}
@@ -81,7 +81,7 @@ func (m *Matrix) Determinant() float64 {
 }
 
 // Submatrix returns a submatrix by removing row and col
-func (m *Matrix) Submatrix(removeRow, removeCol int) Matrix {
+func (m Matrix) Submatrix(removeRow, removeCol int) Matrix {
 	var result []float64
 	for row := 0; row < m.rows; row++ {
 		for col := 0; col < m.cols; col++ {
@@ -95,13 +95,13 @@ func (m *Matrix) Submatrix(removeRow, removeCol int) Matrix {
 
 // Minor calculates the minor of a matrix at a row, col.
 // The minor of an element at row i and column j is the determinant of the submatrix at (i,j).
-func (m *Matrix) Minor(atRow, atCol int) float64 {
+func (m Matrix) Minor(atRow, atCol int) float64 {
 	sub := m.Submatrix(atRow, atCol)
 	return sub.Determinant()
 }
 
 // Cofactor calculates the cofactor of a matrix at row, col.
-func (m *Matrix) Cofactor(atRow, atCol int) float64 {
+func (m Matrix) Cofactor(atRow, atCol int) float64 {
 	minor := m.Minor(atRow, atCol)
 	if (atRow+atCol)%2 != 0 {
 		return minor * -1.0
@@ -110,12 +110,12 @@ func (m *Matrix) Cofactor(atRow, atCol int) float64 {
 }
 
 // IsInvertible checks if a matrix is invertible
-func (m *Matrix) IsInvertible() bool {
+func (m Matrix) IsInvertible() bool {
 	return m.Determinant() != 0.0
 }
 
 // Inverse inverts a matrix
-func (m *Matrix) Inverse() Matrix {
+func (m Matrix) Inverse() Matrix {
 	var cofactorElements []float64
 	for row := 0; row < m.rows; row++ {
 		for col := 0; col < m.cols; col++ {
@@ -136,7 +136,7 @@ func (m *Matrix) Inverse() Matrix {
 }
 
 // Equal checks if to matrix are equal
-func (m *Matrix) Equal(a Matrix) bool {
+func (m Matrix) Equal(a Matrix) bool {
 	if a.cols != m.cols || a.rows != m.rows {
 		return false
 	}

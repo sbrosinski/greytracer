@@ -16,14 +16,12 @@ func TestMultiplyingByTanslation(t *testing.T) {
 }
 
 func TestRotationPointAroundX(t *testing.T) {
-	p := NewPoint(0, 1, 0)
-	halfQuarter := RotationX(math.Pi / 4)
-	pHalfQuarter := halfQuarter.MultiplyWithTuple(p)
+	pHalfQuarter := RotationX(math.Pi / 4).MultiplyWithTuple(NewPoint(0, 1, 0))
 	expectedHalfQuart := NewPoint(0, math.Sqrt2/2, math.Sqrt2/2)
 	assert.True(t, expectedHalfQuart.Equals(pHalfQuarter))
 
 	fullQuarter := RotationX(math.Pi / 2)
-	pFullQuarter := fullQuarter.MultiplyWithTuple(p)
+	pFullQuarter := fullQuarter.MultiplyWithTuple(NewPoint(0, 1, 0))
 	expectedFullQuart := NewPoint(0, 0, 1)
 	assert.True(t, expectedFullQuart.Equals(pFullQuarter))
 }
