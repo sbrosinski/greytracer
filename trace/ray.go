@@ -24,6 +24,7 @@ func (r *Ray) Transform(trans Matrix) Ray {
 }
 
 type SceneObject interface {
+	Intersect(ray Ray) Intersections
 	NormalAt(worldPoint Tuple) Tuple
 	GetMaterial() Material
 }
@@ -37,7 +38,24 @@ type Intersections struct {
 	xs []Intersection
 }
 
-func (i *Intersections) Hit() (Intersection, bool) {
+// Append adds an intersection to the intersecion collection
+func (i *Intersections) Append(inter []Intersection) {
+	i.xs = append(i.xs, inter...)
+}
+
+func (i Intersections) Len() int {
+	return len(i.xs)
+}
+
+func (i Intersections) Swap(a, b int) {
+	i.xs[a], i.xs[b] = i.xs[b], i.xs[a]
+}
+
+func (i Intersections) Less(a, b int) bool {
+	return i.xs[a].T < i.xs[b].T
+}
+
+func (i Intersections) Hit() (Intersection, bool) {
 	lowestNonNegative := Intersection{math.MaxFloat64, nil}
 	for _, intersection := range i.xs {
 		if intersection.T > 0 && intersection.T < lowestNonNegative.T {
