@@ -56,14 +56,14 @@ func TestTranslatingRay(t *testing.T) {
 	r := Ray{NewPoint(1, 2, 3), NewVector(0, 1, 0)}
 	m := Translation(3, 4, 5)
 	r2 := r.Transform(m)
-	assert.Equal(t, NewPoint(4, 6, 8), r2.origin)
-	assert.Equal(t, NewVector(0, 1, 0), r2.direction)
+	assert.Equal(t, NewPoint(4, 6, 8), r2.Origin)
+	assert.Equal(t, NewVector(0, 1, 0), r2.Direction)
 }
 
 func TestScalingRay(t *testing.T) {
 	r := Ray{NewPoint(1, 2, 3), NewVector(0, 1, 0)}
 	m := Scaling(2, 3, 4)
 	r2 := r.Transform(m)
-	assert.Equal(t, NewPoint(2, 6, 12), r2.origin)
-	assert.Equal(t, NewVector(0, 3, 0), r2.direction)
+	assert.Equal(t, NewPoint(2, 6, 12), r2.Origin)
+	assert.Equal(t, NewVector(0, 3, 0), r2.Direction)
 }

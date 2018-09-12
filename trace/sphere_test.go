@@ -11,18 +11,18 @@ func TestRayIntersectsSphere(t *testing.T) {
 	r := Ray{NewPoint(0, 0, -5), NewVector(0, 0, 1)}
 	s := NewSphere()
 	intersections := s.Intersect(r)
-	assert.Equal(t, 4., intersections.xs[0].t)
-	assert.Equal(t, 6., intersections.xs[1].t)
-	assert.Equal(t, &s, intersections.xs[0].object)
-	assert.Equal(t, &s, intersections.xs[1].object)
+	assert.Equal(t, 4., intersections.xs[0].T)
+	assert.Equal(t, 6., intersections.xs[1].T)
+	assert.Equal(t, &s, intersections.xs[0].Object)
+	assert.Equal(t, &s, intersections.xs[1].Object)
 }
 
 func TestRayIntersectsSphereAtTangent(t *testing.T) {
 	r := Ray{NewPoint(0, 1, -5), NewVector(0, 0, 1)}
 	s := NewSphere()
 	intersections := s.Intersect(r)
-	assert.Equal(t, 5., intersections.xs[0].t)
-	assert.Equal(t, 5., intersections.xs[1].t)
+	assert.Equal(t, 5., intersections.xs[0].T)
+	assert.Equal(t, 5., intersections.xs[1].T)
 }
 
 func TestRayMissesSphere(t *testing.T) {
@@ -36,24 +36,24 @@ func TestRayOriginatesInsideSphere(t *testing.T) {
 	r := Ray{NewPoint(0, 0, 0), NewVector(0, 0, 1)}
 	s := NewSphere()
 	intersections := s.Intersect(r)
-	assert.Equal(t, -1., intersections.xs[0].t)
-	assert.Equal(t, 1., intersections.xs[1].t)
+	assert.Equal(t, -1., intersections.xs[0].T)
+	assert.Equal(t, 1., intersections.xs[1].T)
 }
 
 func TestSphereIsBehindRay(t *testing.T) {
 	r := Ray{NewPoint(0, 0, 5), NewVector(0, 0, 1)}
 	s := NewSphere()
 	intersections := s.Intersect(r)
-	assert.Equal(t, -6., intersections.xs[0].t)
-	assert.Equal(t, -4., intersections.xs[1].t)
+	assert.Equal(t, -6., intersections.xs[0].T)
+	assert.Equal(t, -4., intersections.xs[1].T)
 }
 
 func TestIntersectingScaledSphereWithRay(t *testing.T) {
 	r := Ray{NewPoint(0, 0, -5), NewVector(0, 0, 1)}
 	s := sphere{Transform: Scaling(2, 2, 2)}
 	intersections := s.Intersect(r)
-	assert.Equal(t, 3., intersections.xs[0].t)
-	assert.Equal(t, 7., intersections.xs[1].t)
+	assert.Equal(t, 3., intersections.xs[0].T)
+	assert.Equal(t, 7., intersections.xs[1].T)
 }
 
 func TestIntersectingTranslatedSphereWithRay(t *testing.T) {

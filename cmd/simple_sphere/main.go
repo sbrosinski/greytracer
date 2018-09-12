@@ -1,18 +1,23 @@
 package main
 
 import (
-	"math"
-
 	"github.com/sbrosinski/greytracer/trace"
 )
 
-var canvas = trace.NewCanvas(100, 100)
+var canvas = trace.NewCanvas(400, 400)
 
 func main() {
 	sphere := trace.NewSphere()
-	scale := trace.Scaling(1, 0.5, 1)
-	rotate := trace.RotationZ(math.Pi / 4)
-	sphere.Transform = rotate.Multiply(scale)
+	//scale := trace.Scaling(1, 0.5, 1)
+	//rotate := trace.RotationZ(math.Pi / 4)
+	//sphere.Transform = rotate.Multiply(scale)
+	color := trace.Color{0.3, 0.3, 1}
+	sphere.Material = trace.NewMaterial()
+	sphere.Material.Color = color
+
+	lightPosition := trace.NewPoint(-10, 10, -10)
+	lightColor := trace.Color{1, 1, 1}
+	light := trace.Light{lightPosition, lightColor}
 
 	rayOrigin := trace.NewPoint(0, 0, -5)
 	wallZ := 10.0
@@ -34,9 +39,14 @@ func main() {
 			normalizedPosition := substractedPosition.Normalize()
 			r := trace.NewRay(rayOrigin, normalizedPosition)
 			intersections := sphere.Intersect(r)
-			_, hasHit := intersections.Hit()
+			intersection, hasHit := intersections.Hit()
 			if hasHit {
-				canvas.WritePixel(x, y, trace.Red)
+				point := r.Position(intersection.T)
+				normal := intersection.Object.NormalAt(point)
+				eye := r.Direction
+				color := intersection.Object.GetMaterial().Lighting(light, point, eye, normal)
+
+				canvas.WritePixel(x, y, color)
 			}
 		}
 	}
