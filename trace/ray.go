@@ -30,8 +30,22 @@ type SceneObject interface {
 }
 
 type Intersection struct {
-	T      float64
-	Object SceneObject
+	T       float64
+	Object  SceneObject
+	Point   Tuple
+	EyeV    Tuple
+	NormalV Tuple
+	Inside  bool
+}
+
+func (i *Intersection) PrepareHit(ray Ray) {
+	i.Point = ray.Position(i.T)
+	i.EyeV = ray.Direction.Negate()
+	i.NormalV = i.Object.NormalAt(i.Point)
+	i.Inside = i.NormalV.Dot(i.EyeV) < 0
+	if i.Inside {
+		i.NormalV = i.NormalV.Negate()
+	}
 }
 
 type Intersections struct {
@@ -56,7 +70,7 @@ func (i Intersections) Less(a, b int) bool {
 }
 
 func (i Intersections) Hit() (Intersection, bool) {
-	lowestNonNegative := Intersection{math.MaxFloat64, nil}
+	lowestNonNegative := Intersection{T: math.MaxFloat64, Object: nil}
 	for _, intersection := range i.xs {
 		if intersection.T > 0 && intersection.T < lowestNonNegative.T {
 			lowestNonNegative = intersection

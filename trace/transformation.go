@@ -51,3 +51,16 @@ func RotationZ(rad float64) Matrix {
 		0, 0, 0, 1,
 	)
 }
+
+func ViewTransform(from, to, up Tuple) Matrix {
+	forward := to.Subtract(from).Normalize()
+	upn := up.Normalize()
+	left := forward.Cross(upn)
+	trueUp := left.Cross(forward)
+	orientaton := New4X4(
+		left.X, left.Y, left.Z, 0,
+		trueUp.X, trueUp.Y, trueUp.Z, 0,
+		-forward.X, -forward.Y, -forward.Z, 0,
+		0, 0, 0, 1)
+	return orientaton.Multiply(Translation(-from.X, -from.Y, -from.Z))
+}

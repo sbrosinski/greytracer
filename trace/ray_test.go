@@ -16,8 +16,8 @@ func TestPointFromDistance(t *testing.T) {
 
 func TestHitAllPositive(t *testing.T) {
 	s := sphere{}
-	i1 := Intersection{1, s}
-	i2 := Intersection{2, s}
+	i1 := Intersection{T: 1, Object: s}
+	i2 := Intersection{T: 2, Object: s}
 	xs := NewIntersections(i1, i2)
 	i, _ := xs.Hit()
 	assert.Equal(t, i1, i)
@@ -25,8 +25,8 @@ func TestHitAllPositive(t *testing.T) {
 
 func TestHitSomeNegative(t *testing.T) {
 	s := sphere{}
-	i1 := Intersection{-1, s}
-	i2 := Intersection{1, s}
+	i1 := Intersection{T: -1, Object: s}
+	i2 := Intersection{T: 1, Object: s}
 	xs := NewIntersections(i1, i2)
 	i, _ := xs.Hit()
 	assert.Equal(t, i2, i)
@@ -34,8 +34,8 @@ func TestHitSomeNegative(t *testing.T) {
 
 func TestHitAllNegative(t *testing.T) {
 	s := sphere{}
-	i1 := Intersection{-2, s}
-	i2 := Intersection{-1, s}
+	i1 := Intersection{T: -2, Object: s}
+	i2 := Intersection{T: -1, Object: s}
 	xs := NewIntersections(i1, i2)
 	_, hasHit := xs.Hit()
 	assert.False(t, hasHit)
@@ -43,13 +43,43 @@ func TestHitAllNegative(t *testing.T) {
 
 func TestHitAlwaysLowestNonNegative(t *testing.T) {
 	s := sphere{}
-	i1 := Intersection{5, s}
-	i2 := Intersection{7, s}
-	i3 := Intersection{-3, s}
-	i4 := Intersection{2, s}
+	i1 := Intersection{T: 5, Object: s}
+	i2 := Intersection{T: 7, Object: s}
+	i3 := Intersection{T: -3, Object: s}
+	i4 := Intersection{T: 2, Object: s}
 	xs := NewIntersections(i1, i2, i3, i4)
 	i, _ := xs.Hit()
 	assert.Equal(t, i4, i)
+}
+
+func TestPrecomputingStateOfHit(t *testing.T) {
+	ray := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
+	shape := NewSphere()
+	hit := Intersection{T: 4, Object: shape}
+	hit.PrepareHit(ray)
+	assert.Equal(t, NewPoint(0, 0, -1), hit.Point)
+	assert.Equal(t, NewVector(0, 0, -1), hit.EyeV)
+	assert.Equal(t, NewVector(0, 0, -1), hit.NormalV)
+}
+
+func TestHitOutside(t *testing.T) {
+	ray := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
+	shape := NewSphere()
+	hit := Intersection{T: 4, Object: shape}
+	hit.PrepareHit(ray)
+	assert.False(t, hit.Inside)
+}
+
+func TestHitInside(t *testing.T) {
+	ray := NewRay(NewPoint(0, 0, 0), NewVector(0, 0, 1))
+	shape := NewSphere()
+	hit := Intersection{T: 1, Object: shape}
+	hit.PrepareHit(ray)
+	t.Logf("%+v", hit)
+	assert.Equal(t, NewPoint(0, 0, 1), hit.Point)
+	assert.Equal(t, NewVector(0, 0, -1), hit.EyeV)
+	assert.Equal(t, NewVector(0, 0, -1), hit.NormalV)
+	assert.True(t, hit.Inside)
 }
 
 func TestTranslatingRay(t *testing.T) {

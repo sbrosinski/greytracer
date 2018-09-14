@@ -60,3 +60,33 @@ func TestRotationAroundZ(t *testing.T) {
 	expectedFullQuart := NewPoint(-1, 0, 0)
 	assert.True(t, expectedFullQuart.Equals(pFullQuarter))
 }
+
+func TestViewTransformDefault(t *testing.T) {
+	from := NewPoint(0, 0, 0)
+	to := NewPoint(0, 0, -1)
+	up := NewVector(0, 1, 0)
+	vt := ViewTransform(from, to, up)
+	assert.True(t, Identidy4x4.Equal(vt))
+}
+
+func TestViewTransformLookingPositiveZ(t *testing.T) {
+	from := NewPoint(0, 0, 0)
+	to := NewPoint(0, 0, 1)
+	up := NewVector(0, 1, 0)
+	vt := ViewTransform(from, to, up)
+	assert.True(t, Scaling(-1, 1, -1).Equal(vt))
+}
+
+func TestViewTransformRandomView(t *testing.T) {
+	from := NewPoint(1, 3, 2)
+	to := NewPoint(4, -2, 8)
+	up := NewVector(1, 1, 0)
+	vt := ViewTransform(from, to, up)
+	expected := Parse(`
+		| -0.50709 | 0.50709 | 0.67612 | -2.36643 |
+		| 0.76772 | 0.60609 | 0.12122 | -2.82843 |
+		| -0.35857 | 0.59761 | -0.71714 | 0.00000 |
+		| 0.00000 | 0.00000 | 0.00000 | 1.00000 |
+	`)
+	assert.True(t, expected.Equal(vt))
+}

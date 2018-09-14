@@ -33,3 +33,18 @@ func (w World) Intersect(ray Ray) Intersections {
 	sort.Sort(xs)
 	return xs
 }
+
+func (w World) ShadeHit(hit Intersection) Color {
+	return hit.Object.GetMaterial().Lighting(w.Light, hit.Point, hit.EyeV, hit.NormalV)
+}
+
+// ColorAt instersects this world with a ray and returns the color where it hit
+func (w World) ColorAt(ray Ray) Color {
+	intersections := w.Intersect(ray)
+	hit, hasHit := intersections.Hit()
+	if hasHit {
+		hit.PrepareHit(ray)
+		return w.ShadeHit(hit)
+	}
+	return Black
+}

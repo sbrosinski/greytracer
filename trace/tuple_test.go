@@ -82,3 +82,10 @@ func TestReflectingVectorOfSlantedSurface(t *testing.T) {
 	r := v.Reflect(n)
 	assert.True(t, r.Equals(NewVector(1, 0, 0)))
 }
+
+func TestCross(t *testing.T) {
+	a := NewVector(1, 2, 3)
+	b := NewVector(2, 3, 4)
+	assert.True(t, NewVector(-1, 2, -1).Equals(a.Cross(b)))
+	assert.True(t, NewVector(1, -2, 1).Equals(b.Cross(a)))
+}

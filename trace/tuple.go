@@ -90,3 +90,12 @@ func (t Tuple) Equals(a Tuple) bool {
 func (t Tuple) Reflect(normal Tuple) Tuple {
 	return t.Subtract(normal.Multiply(2.0).Multiply(t.Dot(normal)))
 }
+
+// Cross calculates the cross product of a 3 dimensional vector, the forth component of this tuple will be zeroed,
+// assuming it's a vector!
+func (t Tuple) Cross(b Tuple) Tuple {
+	return NewVector(
+		t.Y*b.Z-t.Z*b.Y,
+		t.Z*b.X-t.X*b.Z,
+		t.X*b.Y-t.Y*b.X)
+}

@@ -52,3 +52,9 @@ func (c Color) Normalize() (int, int, int) {
 	blue := cap(int(math.Round(c.Blue * 255)))
 	return red, green, blue
 }
+
+func (c Color) Equals(a Color) bool {
+	return floatEquals(c.Red, a.Red) &&
+		floatEquals(c.Green, a.Green) &&
+		floatEquals(c.Blue, a.Blue)
+}
