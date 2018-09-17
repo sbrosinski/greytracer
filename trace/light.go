@@ -21,7 +21,7 @@ func NewMaterial() Material {
 	return Material{Color{1, 1, 1}, 0.1, 0.9, 0.9, 200.0}
 }
 
-func (m Material) Lighting(light Light, point, eye, normal Tuple) Color {
+func (m Material) Lighting(light Light, point, eye, normal Tuple, inShadow bool) Color {
 	var ambient, diffuse, specular Color
 	effectiveColor := m.Color.Multiply(light.Intensity)
 	lightv := light.Position.Subtract(point).Normalize()
@@ -41,5 +41,10 @@ func (m Material) Lighting(light Light, point, eye, normal Tuple) Color {
 			specular = light.Intensity.MultiplyByScalar(m.Specular).MultiplyByScalar(reflectDotEye)
 		}
 	}
-	return ambient.Add(diffuse).Add(specular)
+
+	if inShadow {
+		return ambient.Add(diffuse)
+	} else {
+		return ambient.Add(diffuse).Add(specular)
+	}
 }

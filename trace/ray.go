@@ -46,6 +46,9 @@ func (i *Intersection) PrepareHit(ray Ray) {
 	if i.Inside {
 		i.NormalV = i.NormalV.Negate()
 	}
+
+	// move point slightly above surface, into direction of normal, to make shadows render properly
+	i.Point = i.Point.Add(i.NormalV.Multiply(0.0001))
 }
 
 type Intersections struct {

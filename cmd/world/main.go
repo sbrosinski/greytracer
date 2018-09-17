@@ -3,8 +3,10 @@ package main
 import (
 	"image"
 	"image/png"
+	"log"
 	"math"
 	"os"
+	"time"
 
 	"github.com/sbrosinski/greytracer/trace"
 )
@@ -52,8 +54,12 @@ func main() {
 		trace.NewPoint(0, 1, 0),
 		trace.NewVector(0, 1, 0))
 
-	img := camera.Render(world)
+	start := time.Now()
+	img := camera.RenderParallel(world)
+	elapsed := time.Since(start)
+	log.Printf("Rendering took %s", elapsed)
 	savePNG(img, "world.png")
+
 }
 
 func savePNG(img image.Image, path string) error {

@@ -1,6 +1,8 @@
 package trace
 
-import "sort"
+import (
+	"sort"
+)
 
 // World defines a scene to be rendered, containing one light and a list of objects
 type World struct {
@@ -35,7 +37,9 @@ func (w World) Intersect(ray Ray) Intersections {
 }
 
 func (w World) ShadeHit(hit Intersection) Color {
-	return hit.Object.GetMaterial().Lighting(w.Light, hit.Point, hit.EyeV, hit.NormalV)
+	shadowed := w.isShadowed(hit.Point)
+	lighting := hit.Object.GetMaterial().Lighting(w.Light, hit.Point, hit.EyeV, hit.NormalV, shadowed)
+	return lighting
 }
 
 // ColorAt instersects this world with a ray and returns the color where it hit
@@ -47,4 +51,14 @@ func (w World) ColorAt(ray Ray) Color {
 		return w.ShadeHit(hit)
 	}
 	return Black
+}
+
+func (w World) isShadowed(point Tuple) bool {
+	v := w.Light.Position.Subtract(point)
+	distance := v.Magnitude()
+	direction := v.Normalize()
+	r := NewRay(point, direction)
+	intersections := w.Intersect(r)
+	hit, hasHit := intersections.Hit()
+	return hasHit && hit.T < distance
 }
