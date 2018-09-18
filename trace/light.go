@@ -43,7 +43,7 @@ func (m Material) Lighting(light Light, point, eye, normal Tuple, inShadow bool)
 	}
 
 	if inShadow {
-		return ambient.Add(diffuse)
+		return ambient
 	} else {
 		return ambient.Add(diffuse).Add(specular)
 	}
