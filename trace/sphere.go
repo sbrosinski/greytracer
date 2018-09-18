@@ -5,16 +5,21 @@ import (
 )
 
 type sphere struct {
-	Transform Matrix
-	Material  Material
+	Shape Shape
 }
 
 func NewSphere() sphere {
-	return sphere{Transform: Identidy4x4, Material: NewMaterial()}
+	return sphere{
+		Shape: NewDefaultShape()}
+}
+
+func NewSphereWithTrans(trans Matrix) sphere {
+	return sphere{
+		Shape: Shape{Transform: trans, Material: NewMaterial()}}
 }
 
 func (s sphere) Intersect(ray Ray) Intersections {
-	transRay := ray.Transform(s.Transform.Inverse())
+	transRay := ray.Transform(s.Shape.Transform.Inverse())
 
 	sphereToRay := transRay.Origin.Subtract(NewPoint(0, 0, 0))
 	a := transRay.Direction.Dot(transRay.Direction)
@@ -31,11 +36,11 @@ func (s sphere) Intersect(ray Ray) Intersections {
 	if t1 > t2 {
 		t1, t2 = t2, t1
 	}
-	return NewIntersections(Intersection{Object: s, T: t1}, Intersection{Object: s, T: t2})
+	return NewIntersections(Intersection{Shape: s, T: t1}, Intersection{Shape: s, T: t2})
 }
 
 func (s sphere) NormalAt(worldPoint Tuple) Tuple {
-	invTransf := s.Transform.Inverse()
+	invTransf := s.Shape.Transform.Inverse()
 	objectPoint := invTransf.MultiplyWithTuple(worldPoint)
 	objectNormal := objectPoint.Subtract(NewPoint(0, 0, 0))
 	invTransfTransposed := invTransf.Transpose()
@@ -44,5 +49,5 @@ func (s sphere) NormalAt(worldPoint Tuple) Tuple {
 }
 
 func (s sphere) GetMaterial() Material {
-	return s.Material
+	return s.Shape.Material
 }

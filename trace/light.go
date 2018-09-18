@@ -36,7 +36,6 @@ func (m Material) Lighting(light Light, point, eye, normal Tuple, inShadow bool)
 		reflectDotEye := math.Pow(reflectv.Dot(eye), m.Shininess)
 		if reflectDotEye <= 0 {
 			specular = Black
-
 		} else {
 			specular = light.Intensity.MultiplyByScalar(m.Specular).MultiplyByScalar(reflectDotEye)
 		}

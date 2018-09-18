@@ -13,8 +13,8 @@ func TestRayIntersectsSphere(t *testing.T) {
 	intersections := s.Intersect(r)
 	assert.Equal(t, 4., intersections.xs[0].T)
 	assert.Equal(t, 6., intersections.xs[1].T)
-	assert.Equal(t, s, intersections.xs[0].Object)
-	assert.Equal(t, s, intersections.xs[1].Object)
+	assert.Equal(t, s, intersections.xs[0].Shape)
+	assert.Equal(t, s, intersections.xs[1].Shape)
 }
 
 func TestRayIntersectsSphereAtTangent(t *testing.T) {
@@ -50,7 +50,7 @@ func TestSphereIsBehindRay(t *testing.T) {
 
 func TestIntersectingScaledSphereWithRay(t *testing.T) {
 	r := Ray{NewPoint(0, 0, -5), NewVector(0, 0, 1)}
-	s := sphere{Transform: Scaling(2, 2, 2)}
+	s := NewSphereWithTrans(Scaling(2, 2, 2))
 	intersections := s.Intersect(r)
 	assert.Equal(t, 3., intersections.xs[0].T)
 	assert.Equal(t, 7., intersections.xs[1].T)
@@ -58,7 +58,7 @@ func TestIntersectingScaledSphereWithRay(t *testing.T) {
 
 func TestIntersectingTranslatedSphereWithRay(t *testing.T) {
 	r := Ray{NewPoint(0, 0, -5), NewVector(0, 0, 1)}
-	s := sphere{Transform: Translation(5, 0, 0)}
+	s := NewSphereWithTrans(Translation(5, 0, 0))
 	intersections := s.Intersect(r)
 	assert.True(t, len(intersections.xs) == 0)
 }
@@ -93,8 +93,7 @@ func TestNormalIsNormalizedVector(t *testing.T) {
 }
 
 func TestNormalOnTranslatedSphere(t *testing.T) {
-	s := NewSphere()
-	s.Transform = Translation(0, 5, 0)
+	s := NewSphereWithTrans(Translation(0, 5, 0))
 	n := s.NormalAt(NewPoint(1, 5, 0))
 	assert.Equal(t, NewVector(1, 0, 0), n)
 }

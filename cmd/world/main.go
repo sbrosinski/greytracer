@@ -13,42 +13,42 @@ import (
 
 func main() {
 	floor := trace.NewSphere()
-	floor.Transform = trace.Scaling(10, 0.01, 10)
-	floor.Material = trace.NewMaterial()
-	floor.Material.Color = trace.Color{1, 0.9, 0.9}
-	floor.Material.Specular = 0.0
+	floor.Shape.Transform = trace.Scaling(10, 0.01, 10)
+	floor.Shape.Material = trace.NewMaterial()
+	floor.Shape.Material.Color = trace.Color{1, 0.9, 0.9}
+	floor.Shape.Material.Specular = 0.0
 
 	leftWall := trace.NewSphere()
-	leftWall.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(-math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
-	leftWall.Material = floor.Material
+	leftWall.Shape.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(-math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
+	leftWall.Shape.Material = floor.Shape.Material
 
 	rightWall := trace.NewSphere()
-	rightWall.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
-	rightWall.Material = floor.Material
+	rightWall.Shape.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
+	rightWall.Shape.Material = floor.Shape.Material
 
-	middle := trace.NewSphere()
-	middle.Transform = trace.Translation(-0.5, 1.0, 0.5)
-	middle.Material = trace.NewMaterial()
-	middle.Material.Color = trace.Color{0.1, 1, 0.5}
-	middle.Material.Diffuse = 0.7
-	middle.Material.Specular = 0.3
+	bottom := trace.NewPlane()
+	bottom.Shape.Material = trace.NewMaterial()
+	bottom.Shape.Material.Color = trace.Color{1, 0.9, 0.9}
+	bottom.Shape.Material.Specular = 0.0
 
-	right := trace.NewSphere()
-	right.Transform = trace.Translation(1.5, 0.5, -0.5).Multiply(trace.Scaling(0.5, 0.5, 0.5))
-	right.Material = trace.NewMaterial()
-	right.Material.Color = trace.Color{1., 0.8, 0.1}
-	right.Material.Diffuse = 0.7
-	right.Material.Specular = 0.3
+	m := trace.NewMaterial()
+	m.Color = trace.Color{0.1, 1, 0.5}
+	m.Diffuse = 0.7
+	m.Specular = 0.2
+	m.Shininess = 300.0
 
-	left := trace.NewSphere()
-	left.Transform = trace.Translation(-1.5, 0.33, -0.75).Multiply(trace.Scaling(0.33, 0.33, 0.33))
-	left.Material = trace.NewMaterial()
-	left.Material.Color = trace.Color{1., 0.8, 0.1}
-	left.Material.Diffuse = 0.7
-	left.Material.Specular = 0.3
+	middle := trace.NewSphereWithTrans(trace.Translation(-0.5, 1.0, 0.5))
+	middle.Shape.Material = m
+
+	right := trace.NewSphereWithTrans(trace.Translation(1.5, 0.5, -0.5).Multiply(trace.Scaling(0.5, 0.5, 0.5)))
+	right.Shape.Material = m
+
+	//left.Transform = trace.Translation(-1.5, 0.33, -0.75).Multiply(trace.Scaling(0.33, 0.33, 0.33))
+	left := trace.NewSphereWithTrans(trace.Translation(-1.5, 0.33, -0.75).Multiply(trace.Scaling(0.33, 0.33, 0.33)))
+	left.Shape.Material = m
 
 	light := trace.Light{trace.NewPoint(-10, 10, -10), trace.Color{1, 1, 1}}
-	world := trace.World{light, []trace.Shape{floor, leftWall, rightWall, middle, right, left}}
+	world := trace.World{light, []trace.ShapeOps{bottom, left, middle, right}}
 	camera := trace.NewCamera(600., 300., math.Pi/3)
 	camera.Transform = trace.ViewTransform(trace.NewPoint(0, 1.5, -5),
 		trace.NewPoint(0, 1, 0),

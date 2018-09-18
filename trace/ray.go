@@ -25,7 +25,7 @@ func (r *Ray) Transform(trans Matrix) Ray {
 
 type Intersection struct {
 	T       float64
-	Object  Shape
+	Shape   ShapeOps
 	Point   Tuple
 	EyeV    Tuple
 	NormalV Tuple
@@ -35,7 +35,7 @@ type Intersection struct {
 func (i *Intersection) PrepareHit(ray Ray) {
 	i.Point = ray.Position(i.T)
 	i.EyeV = ray.Direction.Negate()
-	i.NormalV = i.Object.NormalAt(i.Point)
+	i.NormalV = i.Shape.NormalAt(i.Point)
 	i.Inside = i.NormalV.Dot(i.EyeV) < 0
 	if i.Inside {
 		i.NormalV = i.NormalV.Negate()
@@ -67,7 +67,7 @@ func (i Intersections) Less(a, b int) bool {
 }
 
 func (i Intersections) Hit() (Intersection, bool) {
-	lowestNonNegative := Intersection{T: math.MaxFloat64, Object: nil}
+	lowestNonNegative := Intersection{T: math.MaxFloat64, Shape: nil}
 	for _, intersection := range i.xs {
 		if intersection.T > 0 && intersection.T < lowestNonNegative.T {
 			lowestNonNegative = intersection
