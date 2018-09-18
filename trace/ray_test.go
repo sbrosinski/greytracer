@@ -57,7 +57,7 @@ func TestPrecomputingStateOfHit(t *testing.T) {
 	shape := NewSphere()
 	hit := Intersection{T: 4, Object: shape}
 	hit.PrepareHit(ray)
-	assert.Equal(t, NewPoint(0, 0, -1), hit.Point)
+	assert.True(t, NewPoint(0, 0, -1).Equals(hit.Point))
 	assert.Equal(t, NewVector(0, 0, -1), hit.EyeV)
 	assert.Equal(t, NewVector(0, 0, -1), hit.NormalV)
 }
@@ -75,9 +75,8 @@ func TestHitInside(t *testing.T) {
 	shape := NewSphere()
 	hit := Intersection{T: 1, Object: shape}
 	hit.PrepareHit(ray)
-	t.Logf("%+v", hit)
-	assert.Equal(t, NewPoint(0, 0, 1), hit.Point)
-	assert.Equal(t, NewVector(0, 0, -1), hit.EyeV)
+	assert.True(t, NewPoint(0, 0, 1).Equals(hit.Point))
+	assert.True(t, NewVector(0, 0, -1).Equals(hit.EyeV))
 	assert.Equal(t, NewVector(0, 0, -1), hit.NormalV)
 	assert.True(t, hit.Inside)
 }

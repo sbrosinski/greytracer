@@ -13,8 +13,8 @@ func TestRayIntersectsSphere(t *testing.T) {
 	intersections := s.Intersect(r)
 	assert.Equal(t, 4., intersections.xs[0].T)
 	assert.Equal(t, 6., intersections.xs[1].T)
-	assert.Equal(t, &s, intersections.xs[0].Object)
-	assert.Equal(t, &s, intersections.xs[1].Object)
+	assert.Equal(t, s, intersections.xs[0].Object)
+	assert.Equal(t, s, intersections.xs[1].Object)
 }
 
 func TestRayIntersectsSphereAtTangent(t *testing.T) {

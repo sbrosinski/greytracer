@@ -24,5 +24,5 @@ func TestLightingWithSurfaceInShadow(t *testing.T) {
 	light := Light{Position: NewPoint(0, 0, -10), Intensity: White}
 	inShadow := true
 	result := m.Lighting(light, position, eye, normal, inShadow)
-	assert.Equal(t, Color{1.9, 1.9, 1.9}, result)
+	assert.Equal(t, Color{0.1, 0.1, 0.1}, result)
 }

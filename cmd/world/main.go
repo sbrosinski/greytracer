@@ -48,7 +48,7 @@ func main() {
 	left.Material.Specular = 0.3
 
 	light := trace.Light{trace.NewPoint(-10, 10, -10), trace.Color{1, 1, 1}}
-	world := trace.World{light, []trace.SceneObject{floor, leftWall, rightWall, middle, right, left}}
+	world := trace.World{light, []trace.Shape{floor, leftWall, rightWall, middle, right, left}}
 	camera := trace.NewCamera(600., 300., math.Pi/3)
 	camera.Transform = trace.ViewTransform(trace.NewPoint(0, 1.5, -5),
 		trace.NewPoint(0, 1, 0),

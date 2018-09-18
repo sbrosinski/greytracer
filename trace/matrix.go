@@ -151,7 +151,7 @@ func (m Matrix) Equal(a Matrix) bool {
 }
 
 func floatEquals(a, b float64) bool {
-	diff := 0.00001
+	diff := 0.001
 	if (a-b) < diff && (b-a) < diff {
 		return true
 	}

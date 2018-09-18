@@ -23,15 +23,9 @@ func (r *Ray) Transform(trans Matrix) Ray {
 		Origin: trans.MultiplyWithTuple(r.Origin), Direction: trans.MultiplyWithTuple(r.Direction)}
 }
 
-type SceneObject interface {
-	Intersect(ray Ray) Intersections
-	NormalAt(worldPoint Tuple) Tuple
-	GetMaterial() Material
-}
-
 type Intersection struct {
 	T       float64
-	Object  SceneObject
+	Object  Shape
 	Point   Tuple
 	EyeV    Tuple
 	NormalV Tuple
