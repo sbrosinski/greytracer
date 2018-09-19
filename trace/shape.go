@@ -12,7 +12,8 @@ func (s *Shape) ApplyTransformation(tansformation Matrix) {
 func NewDefaultShape() Shape {
 	return Shape{
 		Transform: Identidy4x4,
-		Material:  NewMaterial()}
+		Material:  NewMaterial(),
+	}
 }
 
 // ShapeOps describes an object in a rendered world. A shape can e.g. be a sphere, a plane.

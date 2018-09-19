@@ -2,6 +2,43 @@ package trace
 
 import "math"
 
+type Transform struct {
+	matrix Matrix
+}
+
+func NewTransform() *Transform {
+	return &Transform{matrix: Identidy4x4}
+}
+
+func (t *Transform) Scale(x, y, z float64) *Transform {
+	t.matrix = t.matrix.Multiply(Scaling(x, y, z))
+	return t
+}
+
+func (t *Transform) Translate(x, y, z float64) *Transform {
+	t.matrix = t.matrix.Multiply(Translation(x, y, z))
+	return t
+}
+
+func (t *Transform) RotateX(rad float64) *Transform {
+	t.matrix = t.matrix.Multiply(RotationX(rad))
+	return t
+}
+
+func (t *Transform) RotateY(rad float64) *Transform {
+	t.matrix = t.matrix.Multiply(RotationY(rad))
+	return t
+}
+
+func (t *Transform) RotateZ(rad float64) *Transform {
+	t.matrix = t.matrix.Multiply(RotationZ(rad))
+	return t
+}
+
+func (t *Transform) Matrix() Matrix {
+	return t.matrix
+}
+
 // Translation returns a translation matrix for x, y, z
 func Translation(x, y, z float64) Matrix {
 	return New4X4(

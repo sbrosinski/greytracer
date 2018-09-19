@@ -5,7 +5,7 @@ import (
 )
 
 type sphere struct {
-	Shape Shape
+	Shape
 }
 
 func NewSphere() sphere {

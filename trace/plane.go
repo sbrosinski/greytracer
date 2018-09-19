@@ -5,7 +5,7 @@ import (
 )
 
 type Plane struct {
-	Shape Shape
+	Shape
 }
 
 func NewPlane() Plane {
@@ -26,5 +26,5 @@ func (p Plane) Intersect(ray Ray) Intersections {
 }
 
 func (p Plane) GetMaterial() Material {
-	return p.Shape.Material
+	return p.Material
 }

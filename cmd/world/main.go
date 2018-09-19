@@ -1,30 +1,29 @@
 package main
 
 import (
-	"image"
-	"image/png"
 	"log"
 	"math"
-	"os"
 	"time"
 
+	"github.com/sbrosinski/greytracer/pkg/render"
 	"github.com/sbrosinski/greytracer/trace"
 )
 
 func main() {
 	floor := trace.NewSphere()
-	floor.Shape.Transform = trace.Scaling(10, 0.01, 10)
-	floor.Shape.Material = trace.NewMaterial()
-	floor.Shape.Material.Color = trace.Color{1, 0.9, 0.9}
-	floor.Shape.Material.Specular = 0.0
+	floor.Transform = trace.Scaling(10, 0.01, 10)
+	floor.Material = trace.NewMaterial()
+	floor.Material.Color = trace.Color{Red: 1, Green: 0.9, Blue: 0.9}
+	floor.Material.Specular = 0.0
 
 	leftWall := trace.NewSphere()
-	leftWall.Shape.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(-math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
-	leftWall.Shape.Material = floor.Shape.Material
+	//leftWall.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(-math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
+	leftWall.Transform = trace.NewTransform().Translate(0, 0, 5.).RotateY(-math.Pi/4).RotateX(math.Pi/2).Scale(10.0, 0.01, 10.0).Matrix()
+	leftWall.Material = floor.Material
 
 	rightWall := trace.NewSphere()
 	rightWall.Shape.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
-	rightWall.Shape.Material = floor.Shape.Material
+	rightWall.Shape.Material = floor.Material
 
 	bottom := trace.NewPlane()
 	bottom.Shape.Material = trace.NewMaterial()
@@ -38,39 +37,31 @@ func main() {
 	m.Shininess = 300.0
 
 	middle := trace.NewSphereWithTrans(trace.Translation(-0.5, 1.0, 0.5))
-	middle.Shape.Material = m
+	middle.Material = m
 
 	right := trace.NewSphereWithTrans(trace.Translation(1.5, 0.5, -0.5).Multiply(trace.Scaling(0.5, 0.5, 0.5)))
-	right.Shape.Material = m
+	right.Material = m
 
-	//left.Transform = trace.Translation(-1.5, 0.33, -0.75).Multiply(trace.Scaling(0.33, 0.33, 0.33))
-	left := trace.NewSphereWithTrans(trace.Translation(-1.5, 0.33, -0.75).Multiply(trace.Scaling(0.33, 0.33, 0.33)))
-	left.Shape.Material = m
+	//left := trace.NewSphereWithTrans(trace.Translation(-1.5, 0.33, -0.75).Multiply(trace.Scaling(0.33, 0.33, 0.33)))
+	trans := trace.NewTransform().Translate(-1.5, 0.33, -0.75).Scale(0.33, 0.33, 0.33).Matrix()
+
+	left := trace.NewSphereWithTrans(trans)
+	left.Material = m
 
 	light := trace.Light{trace.NewPoint(-10, 10, -10), trace.Color{1, 1, 1}}
-	world := trace.World{light, []trace.ShapeOps{bottom, left, middle, right}}
-	camera := trace.NewCamera(600., 300., math.Pi/3)
+
+	world := trace.World{light, []trace.ShapeOps{leftWall, rightWall, floor, left, middle, right}}
+
+	camera := trace.NewCamera(600, 300, math.Pi/3)
 	camera.Transform = trace.ViewTransform(trace.NewPoint(0, 1.5, -5),
 		trace.NewPoint(0, 1, 0),
 		trace.NewVector(0, 1, 0))
 
 	start := time.Now()
-	img := camera.RenderParallel(world)
+
+	scene := render.Scene{}
+	scene.ToFile(camera, world, "world.png")
 	elapsed := time.Since(start)
 	log.Printf("Rendering took %s", elapsed)
-	savePNG(img, "world.png")
 
-}
-
-func savePNG(img image.Image, path string) error {
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	err = png.Encode(f, img)
-	if err != nil {
-		return err
-	}
-	return nil
 }
