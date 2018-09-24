@@ -28,3 +28,7 @@ func (p Plane) Intersect(ray Ray) Intersections {
 func (p Plane) GetMaterial() Material {
 	return p.Material
 }
+
+func (p Plane) GetShape() Shape {
+	return p.Shape
+}

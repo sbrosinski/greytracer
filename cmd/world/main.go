@@ -15,6 +15,8 @@ func main() {
 	floor.Material = trace.NewMaterial()
 	floor.Material.Color = trace.Color{Red: 1, Green: 0.9, Blue: 0.9}
 	floor.Material.Specular = 0.0
+	floor.Material.Pattern = trace.NewGradientPattern(trace.Red, trace.White)
+	//floor.Material.Pattern.Transform = trace.NewTransform().RotateZ(math.Pi/2).Scale(-10, -10, -10).Matrix()
 
 	leftWall := trace.NewSphere()
 	//leftWall.Transform = trace.Translation(0, 0, 5.).Multiply(trace.RotationY(-math.Pi / 4)).Multiply(trace.RotationX(math.Pi / 2)).Multiply(trace.Scaling(10.0, 0.01, 10.0))
@@ -26,15 +28,17 @@ func main() {
 	rightWall.Shape.Material = floor.Material
 
 	bottom := trace.NewPlane()
-	bottom.Shape.Material = trace.NewMaterial()
-	bottom.Shape.Material.Color = trace.Color{1, 0.9, 0.9}
-	bottom.Shape.Material.Specular = 0.0
+	bottom.Transform = trace.NewTransform().Scale(10, 0.01, 10).Matrix()
+	bottom.Shape.Material = floor.Material
+	bottom.Material.Pattern = trace.NewGradientPattern(trace.Red, trace.White)
+	bottom.Material.Pattern.Transform = trace.NewTransform().Scale(10, 0.01, 10).Matrix()
 
 	m := trace.NewMaterial()
 	m.Color = trace.Color{0.1, 1, 0.5}
 	m.Diffuse = 0.7
 	m.Specular = 0.2
 	m.Shininess = 300.0
+	m.Pattern = trace.NewGradientPattern(trace.Red, trace.White)
 
 	middle := trace.NewSphereWithTrans(trace.Translation(-0.5, 1.0, 0.5))
 	middle.Material = m
@@ -50,9 +54,9 @@ func main() {
 
 	light := trace.Light{trace.NewPoint(-10, 10, -10), trace.Color{1, 1, 1}}
 
-	world := trace.World{light, []trace.ShapeOps{leftWall, rightWall, floor, left, middle, right}}
+	world := trace.World{light, []trace.ShapeOps{bottom, left, middle, right}}
 
-	camera := trace.NewCamera(600, 300, math.Pi/3)
+	camera := trace.NewCamera(300, 150, math.Pi/3)
 	camera.Transform = trace.ViewTransform(trace.NewPoint(0, 1.5, -5),
 		trace.NewPoint(0, 1, 0),
 		trace.NewVector(0, 1, 0))

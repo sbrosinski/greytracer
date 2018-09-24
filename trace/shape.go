@@ -22,4 +22,5 @@ type ShapeOps interface {
 	NormalAt(worldPoint Tuple) Tuple
 	GetMaterial() Material
 	//Lighting(light Light, point, eye, normal Tuple, inShadow bool)
+	GetShape() Shape
 }

@@ -51,3 +51,7 @@ func (s sphere) NormalAt(worldPoint Tuple) Tuple {
 func (s sphere) GetMaterial() Material {
 	return s.Shape.Material
 }
+
+func (s sphere) GetShape() Shape {
+	return s.Shape
+}

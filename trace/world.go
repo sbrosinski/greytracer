@@ -39,7 +39,7 @@ func (w World) Intersect(ray Ray) Intersections {
 
 func (w World) ShadeHit(hit Intersection) Color {
 	shadowed := w.isShadowed(hit.Point)
-	lighting := hit.Shape.GetMaterial().Lighting(w.Light, hit.Point, hit.EyeV, hit.NormalV, shadowed)
+	lighting := hit.Shape.GetMaterial().Lighting(hit.Shape, w.Light, hit.Point, hit.EyeV, hit.NormalV, shadowed)
 	return lighting
 }
 

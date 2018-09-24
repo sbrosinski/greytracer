@@ -20,6 +20,13 @@ func (c Color) Add(a Color) Color {
 		a.Blue + c.Blue}
 }
 
+func (c Color) Substract(a Color) Color {
+	return Color{
+		c.Red - a.Red,
+		c.Green - a.Green,
+		c.Blue - a.Blue}
+}
+
 // Multiply multiplies a tuple from this tuple
 func (c Color) Multiply(a Color) Color {
 	r := c.Red * a.Red
