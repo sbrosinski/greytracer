@@ -28,10 +28,10 @@ func main() {
 	rightWall.Shape.Material = floor.Material
 
 	bottom := trace.NewPlane()
-	bottom.Transform = trace.NewTransform().Scale(10, 0.01, 10).Matrix()
+	//bottom.Transform = trace.NewTransform().Scale(10, 0.01, 10).Matrix()
 	bottom.Shape.Material = floor.Material
 	bottom.Material.Pattern = trace.NewGradientPattern(trace.Red, trace.White)
-	bottom.Material.Pattern.Transform = trace.NewTransform().Scale(10, 0.01, 10).Matrix()
+	//bottom.Material.Pattern.Transform = trace.NewTransform().Scale(10, 0.01, 10).Matrix()
 
 	m := trace.NewMaterial()
 	m.Color = trace.Color{0.1, 1, 0.5}
