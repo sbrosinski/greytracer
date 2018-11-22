@@ -36,3 +36,14 @@ func TestRayWhenCameraIsTransformed(t *testing.T) {
 	assert.Equal(t, NewPoint(0, 2, -5), r.Origin)
 	assert.True(t, NewVector(math.Sqrt2/2, 0, -math.Sqrt2/2).Equals(r.Direction))
 }
+
+func TestRenderWorldWithCamera(t *testing.T) {
+	w := NewDefaultWorld()
+	c := NewCamera(11, 11, math.Pi/2)
+	from := NewPoint(0, 0, -5)
+	to := NewPoint(0, 0, 0)
+	up := NewVector(0, 1, 0)
+	c.Transform = ViewTransform(from, to, up)
+	canvas := c.Render(w)
+	assert.True(t, canvas.PixelAt(5, 5).Equals(Color{0.38066, 0.47583, 0.2855}))
+}

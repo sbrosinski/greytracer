@@ -1,7 +1,6 @@
 package trace
 
 import (
-	"image"
 	"math"
 )
 
@@ -45,7 +44,7 @@ func (c *Camera) RayForPixel(px, py float64) Ray {
 	return Ray{Origin: origin, Direction: direction}
 }
 
-func (c *Camera) Render(world World) image.Image {
+func (c *Camera) Render(world World) Canvas {
 	canvas := NewCanvas(int(c.HSize), int(c.VSize))
 	for y := 0; y <= canvas.Height-1; y++ {
 		for x := 0; x <= canvas.Width-1; x++ {
@@ -55,5 +54,5 @@ func (c *Camera) Render(world World) image.Image {
 
 		}
 	}
-	return canvas.ToImage()
+	return canvas
 }

@@ -19,6 +19,7 @@ func NewDefaultWorld() World {
 	sphere1.Shape.Material.Color = Color{0.8, 1.0, 0.6}
 	sphere1.Shape.Material.Diffuse = 0.7
 	sphere1.Shape.Material.Specular = 0.2
+	sphere1.Material.Pattern = NewStripePattern(White, Red)
 
 	sphere2 := NewSphere()
 	sphere2.Shape.Transform = Scaling(0.5, 0.5, 0.5)

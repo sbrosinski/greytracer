@@ -11,27 +11,27 @@ func NewTransform() *Transform {
 }
 
 func (t *Transform) Scale(x, y, z float64) *Transform {
-	t.matrix = t.matrix.Multiply(Scaling(x, y, z))
+	t.matrix = Scaling(x, y, z).Multiply(t.matrix)
 	return t
 }
 
 func (t *Transform) Translate(x, y, z float64) *Transform {
-	t.matrix = t.matrix.Multiply(Translation(x, y, z))
+	t.matrix = Translation(x, y, z).Multiply(t.matrix)
 	return t
 }
 
 func (t *Transform) RotateX(rad float64) *Transform {
-	t.matrix = t.matrix.Multiply(RotationX(rad))
+	t.matrix = RotationX(rad).Multiply(t.matrix)
 	return t
 }
 
 func (t *Transform) RotateY(rad float64) *Transform {
-	t.matrix = t.matrix.Multiply(RotationY(rad))
+	t.matrix = RotationY(rad).Multiply(t.matrix)
 	return t
 }
 
 func (t *Transform) RotateZ(rad float64) *Transform {
-	t.matrix = t.matrix.Multiply(RotationZ(rad))
+	t.matrix = RotationZ(rad).Multiply(t.matrix)
 	return t
 }
 
